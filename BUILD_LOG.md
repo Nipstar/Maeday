@@ -264,9 +264,17 @@ Lighthouse mobile after the fix, 14 Nov 2026 (local, simulated throttling, all p
 
 LCP is at or under 1.8 s on 8 of 12 pages in this run and varies by up to a second between runs; it is no longer tied to the scripts.
 
+## Hosting change: Vercel (14 November 2026)
+
+Andy confirmed the site goes on Vercel, not Cloudflare Pages. Changes:
+- `docs/DEPLOY.md` rewritten for Vercel: project import (Next.js preset, defaults, Node 22), environment variables per environment (Production, Preview, Development), apex and `www` (redirect, 301) with DNS-only records in Cloudflare, `callmaeday.com` and `getmaeday.com` as Vercel domain redirects (or a Cloudflare Redirect Rule), Vercel Firewall settings so AI crawlers are not blocked, Deployment Protection only on previews, the Vercel Toolbar and the CSP, and the same live checks. Cloudflare Pages kept as section 9.
+- `package.json` `engines.node` pinned to `22.x` (Vercel reads it).
+- `site.config.ts`: on Vercel preview deployments the site domain is the branch preview URL (`NEXT_PUBLIC_VERCEL_ENV`, `NEXT_PUBLIC_VERCEL_BRANCH_URL`, exposed by Vercel by default), so previews need no `NEXT_PUBLIC_SITE_URL`. Production is unchanged.
+- README, CLAUDE.md and `.env.example` updated. `vercel.json` already mirrored `public/_headers` (checked: every global header matches).
+
 ## Phase 8: Deploy (not run)
 
-Per the run instructions, nothing was deployed. `docs/DEPLOY.md` has the exact Cloudflare Pages steps (project settings, build command and output, `NODE_VERSION=22`), environment variables per environment (`ALLOW_PLACEHOLDERS=1` on Preview only, `NEXT_PUBLIC_SITE_URL` on Preview only), the apex and `www` setup, the `callmaeday.com` and `getmaeday.com` 301 redirect rule (single redirect per zone, or Bulk Redirects), crawler access (Bot Fight Mode, AI crawl blocking, managed robots.txt) with a per-user-agent curl loop, and the live checks: headers, `llms.txt` as `text/plain`, OG images as PNG, 404 status, redirects, sitemap count, Lighthouse on the live URL, Rich Results Test, booking modal, demo line, Starter test order, IndexNow ping, Search Console and Bing. Tag `v1.0.0` after they pass.
+Per the run instructions, nothing was deployed. (Superseded by the hosting change above: `docs/DEPLOY.md` now covers Vercel first.) The original version had the exact Cloudflare Pages steps (project settings, build command and output, `NODE_VERSION=22`), environment variables per environment (`ALLOW_PLACEHOLDERS=1` on Preview only, `NEXT_PUBLIC_SITE_URL` on Preview only), the apex and `www` setup, the `callmaeday.com` and `getmaeday.com` 301 redirect rule (single redirect per zone, or Bulk Redirects), crawler access (Bot Fight Mode, AI crawl blocking, managed robots.txt) with a per-user-agent curl loop, and the live checks: headers, `llms.txt` as `text/plain`, OG images as PNG, 404 status, redirects, sitemap count, Lighthouse on the live URL, Rich Results Test, booking modal, demo line, Starter test order, IndexNow ping, Search Console and Bing. Tag `v1.0.0` after they pass.
 
 ## Open placeholders (build of 14 Nov 2026, no env values set)
 

@@ -43,7 +43,7 @@ Deployment values come from `NEXT_PUBLIC_*` environment variables, read at **bui
 
 | Variable | Replaces | Notes |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | default domain | Set to the preview URL on test deploys only |
+| `NEXT_PUBLIC_SITE_URL` | default domain | Optional override. Leave unset in production; Vercel previews use their branch URL automatically |
 | `NEXT_PUBLIC_EMAIL` | `[[EMAIL]]` | Footer, schema, legal pages, thank-you |
 | `NEXT_PUBLIC_DEMO_PHONE_DISPLAY` | `[[DEMO_PHONE_DISPLAY]]` | Twilio number on the Retell demo agent ("Oak Street Property Management"), as shown |
 | `NEXT_PUBLIC_DEMO_PHONE_E164` | `[[DEMO_PHONE_E164]]` | Same number for `tel:` links, e.g. `+15550100142` |
@@ -51,24 +51,23 @@ Deployment values come from `NEXT_PUBLIC_*` environment variables, read at **bui
 | `NEXT_PUBLIC_ORDER_FORM_URL` | `[[ORDER_FORM_URL]]` | Starter checkout (pricing page only) |
 | `NEXT_PUBLIC_GO_LIVE` | `[[GO_LIVE]]` | Setup time shown in FAQs and on thank-you, e.g. `3 to 5 business days` |
 | `NEXT_PUBLIC_GTM_ID` | (GTM off) | Optional |
-| `ALLOW_PLACEHOLDERS` | | `1` on preview builds only. Never on production |
+| `ALLOW_PLACEHOLDERS` | | `1` on Preview and Development builds only. Never on Production |
 
 `.env.example` holds fictional values (555-01xx numbers, example.com URLs) for testing.
 
-## Deploy to Cloudflare Pages
-
-Full steps, environment variables per environment, the `callmaeday.com` and `getmaeday.com` redirect rule and the live checks are in [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
-
-1. Workers & Pages > Create > Pages > Connect to Git, repo `Nipstar/maeday`.
-2. Framework preset **None**, build command `npm run build`, output directory `out`, `NODE_VERSION=22`.
-3. Environment variables per environment; `ALLOW_PLACEHOLDERS=1` on **Preview** only.
-4. Custom domain on the apex, `www` redirecting to it.
-
-Headers come from `public/_headers` (HSTS, nosniff, Referrer-Policy, Permissions-Policy, a CSP that allows the booking calendar and GTM, long cache on `/_next/static/*` and fonts, `text/plain` on `llms*.txt`, `image/png` on the extensionless OG images).
-
 ## Deploy to Vercel
 
-Import the repo (framework Next.js, defaults). `vercel.json` holds the same headers as `public/_headers`: keep the two in sync. Set the same environment variables.
+Full steps, environment variables per environment, the domain and redirect setup (`www`, `callmaeday.com`, `getmaeday.com`), crawler access and the live checks are in [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
+
+1. Vercel > Add New > Project > import `Nipstar/maeday`. Framework **Next.js** (auto-detected), build and output on their defaults: Vercel runs `npm run build` (with the `prebuild` and `postbuild` checks) and serves the static export from `out/`. Node.js `22.x`.
+2. Environment variables per environment (Production, Preview, Development). `ALLOW_PLACEHOLDERS=1` on Preview and Development only. Previews point canonicals at their own branch URL automatically.
+3. Domains: the apex, with `www` redirecting to it; DNS stays on Cloudflare with **DNS only** records pointing at Vercel.
+
+Headers come from `vercel.json`: HSTS, nosniff, Referrer-Policy, Permissions-Policy, a CSP that allows the booking calendar and GTM, long cache on `/_next/static/*` and fonts, `text/plain` on `llms*.txt`, `image/png` on the extensionless OG images.
+
+## Deploy to Cloudflare Pages (fallback)
+
+Framework preset None, build `npm run build`, output `out`, `NODE_VERSION=22`, the same variables. Headers come from `public/_headers`, which mirrors `vercel.json`: keep the two in sync. See `docs/DEPLOY.md` section 9.
 
 ## Where things live
 
@@ -121,7 +120,8 @@ The first seven are set by environment variable. The rest are in `src/site.confi
 - [ ] **Starter order form** (GHL or Stripe), $197 monthly plus the $297 setup fee, redirecting after payment to `https://propertymanagementafterhoursansweringservice.com/thank-you/`. URL in `NEXT_PUBLIC_ORDER_FORM_URL`.
 - [ ] **Retell demo agent** ("Oak Street Property Management") on a **Twilio demo number**: display and E.164 forms in the two demo-phone variables.
 - [ ] **Twilio A2P 10DLC** brand and campaign registration (text alerts depend on it; flip `flags.sms` only after approval).
-- [ ] **callmaeday.com** and **getmaeday.com** bought on Cloudflare and 301-redirected to the apex (see `docs/DEPLOY.md`).
+- [ ] **Vercel project** created from the repo, environment variables set, apex and `www` added with DNS-only records in Cloudflare (see `docs/DEPLOY.md`).
+- [ ] **callmaeday.com** and **getmaeday.com** bought on Cloudflare and 301-redirected to the apex (Vercel domain redirect or a Cloudflare Redirect Rule; see `docs/DEPLOY.md`).
 - [ ] Reverse link on aireceptionistforsmallbusiness.net `/for/property-management/` with the anchor "after-hours answering service for property managers".
 - [ ] Search Console and Bing Webmaster Tools verified; sitemap submitted.
 

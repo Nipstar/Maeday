@@ -1,90 +1,82 @@
-# Deploy: Cloudflare Pages
+# Deploy: Vercel
 
-Not deployed yet. These are the steps for Andy (or a later session with Cloudflare access) to put `build/v1` live at the apex, with `www`, `callmaeday.com` and `getmaeday.com` redirecting to it. Tag the release `v1.0.0` once it is live and the checks at the end pass.
+Not deployed yet. These are the steps to put the site live on Vercel at the apex, with `www`, `callmaeday.com` and `getmaeday.com` redirecting to it. Tag the release `v1.0.0` once it is live and the checks at the end pass. Cloudflare Pages still works as a fallback (section 9).
 
-Domain: `propertymanagementafterhoursansweringservice.com` (already on Andy's Cloudflare account since 24 Oct 2026, no DNS records yet).
+Domain: `propertymanagementafterhoursansweringservice.com`. Its DNS is on Andy's Cloudflare account (added 24 Oct 2026, no records yet); Cloudflare stays the DNS provider and Vercel serves the site.
 
-Cloudflare renames menus often. If a label below has moved, search the dashboard for the same words.
+Vercel and Cloudflare rename menus often. If a label below has moved, search for the same words.
 
 ## 1. Before the first production deploy
 
-Fill these first (production builds fail while any `[[PLACEHOLDER]]` is left):
+Production builds fail while any `[[PLACEHOLDER]]` is left, so fill these first:
 
-- The seven environment variables in section 3 (email, demo line, booking URL, order form URL, go-live time).
+- The environment variables in section 3 (email, demo line, booking URL, order form URL, go-live time).
 - The placeholders that live in code, in `src/site.config.ts`: `annual`, `contract`, `rollover`, `portfolioExtra`, `concurrentCalls`, `timing.integration`, `timing.tourBooking`, `address`, `phone`.
 - Reviewed legal text in `src/app/privacy/page.tsx` and `src/app/terms/page.tsx` (replace `[[PRIVACY_*]]` and `[[TERMS_*]]`, and remove `noindex` when the text is final).
-- Run locally with the real values in `.env.local`: `npm run build` (without `ALLOW_PLACEHOLDERS`) must pass. It prints any placeholder still left and the pages it is on.
+- Check locally with the real values in `.env.local`: `npm run build` (without `ALLOW_PLACEHOLDERS`) must pass. It prints any placeholder still left and the pages it is on.
 
-## 2. Create the Pages project
+## 2. Create the Vercel project
 
-1. Cloudflare dashboard > **Workers & Pages** > **Create** > **Pages** tab > **Connect to Git**.
-2. Authorize GitHub if asked, pick **Nipstar/maeday**.
-3. Project name: `maeday`. Production branch: `main`.
-4. Build settings:
-   - Framework preset: **None**
-   - Build command: `npm run build`
-   - Build output directory: `out`
-   - Root directory: (leave empty)
-5. Environment variables: add the **Production** set from section 3 now (you can add Preview after the first deploy under **Settings** > **Environment variables**).
-6. **Save and Deploy**. The first build runs `prebuild` (llms.txt and source checks), `next build` and `postbuild` (site checks). A failing check fails the deploy, which is intended.
+1. Vercel dashboard > **Add New** > **Project** > import **Nipstar/maeday** from GitHub (install the Vercel GitHub app on the repo if asked).
+2. Framework preset: **Next.js** (auto-detected). Root directory: `./`.
+3. Build and output settings: leave the defaults. Vercel runs `npm run build`, which also runs `prebuild` (llms.txt and source checks) and `postbuild` (runtime deferral and site checks), and it detects the static export (`output: 'export'`) and serves `out/`. Install command: default (`npm install`).
+4. Node.js version: `22.x` (Settings > **Build and Deployment** > Node.js Version). `package.json` also pins `"engines": { "node": "22.x" }`.
+5. Add the **Production** environment variables from section 3 before the first deploy, then **Deploy**. A failing check fails the deploy, which is intended.
+6. Settings > **Git**: production branch `main`. Every other branch and every pull request gets a preview deployment.
 
-Preview deploys: every push to another branch (for example `build/v1`) gets a `*.maeday.pages.dev` URL with the Preview variables.
+Headers come from `vercel.json` (security headers and CSP, long cache on `/_next/static/*` and fonts, `text/plain` on `llms*.txt`, `image/png` on the extensionless OG images, `trailingSlash: true`). `public/_headers` holds the same headers for Cloudflare Pages; keep the two in sync.
 
 ## 3. Environment variables per environment
 
-Set under Workers & Pages > `maeday` > **Settings** > **Environment variables**, separately for Production and Preview. None is secret (they are all public in the HTML); use plain text, not encrypted secrets, so they are visible at build time.
+Project > **Settings** > **Environment Variables**. Tick the environments each value applies to. None is secret (all end up in the public HTML), so they do not need to be marked Sensitive. Values are read at build time: after changing one, redeploy (Deployments > the latest > **Redeploy**).
 
-| Variable | Production | Preview |
-|---|---|---|
-| `NODE_VERSION` | `22` | `22` |
-| `NEXT_PUBLIC_EMAIL` | the real public email | same as production, or `hello@example.com` |
-| `NEXT_PUBLIC_DEMO_PHONE_DISPLAY` | the Twilio demo number as shown, e.g. `(555) 010-0142` style formatting | same as production |
-| `NEXT_PUBLIC_DEMO_PHONE_E164` | the same number in E.164, e.g. `+1` and 10 digits | same as production |
-| `NEXT_PUBLIC_BOOKING_URL` | the setup-call calendar URL | same as production |
-| `NEXT_PUBLIC_ORDER_FORM_URL` | the Starter checkout URL | a test-mode checkout if you have one |
-| `NEXT_PUBLIC_GO_LIVE` | e.g. `3 to 5 business days` | same as production |
-| `NEXT_PUBLIC_GTM_ID` | the GTM container ID, or leave unset | leave unset |
-| `NEXT_PUBLIC_SITE_URL` | **leave unset** | the preview URL, e.g. `https://build-v1.maeday.pages.dev` (so canonicals, OG images and the sitemap point at the preview) |
-| `ALLOW_PLACEHOLDERS` | **never set** | `1` |
+| Variable | Production | Preview | Development |
+|---|---|---|---|
+| `NEXT_PUBLIC_EMAIL` | the real public email | same | same |
+| `NEXT_PUBLIC_DEMO_PHONE_DISPLAY` | the Twilio demo number as shown | same | same |
+| `NEXT_PUBLIC_DEMO_PHONE_E164` | the same number in E.164 (`+1` and 10 digits) | same | same |
+| `NEXT_PUBLIC_BOOKING_URL` | the setup-call calendar URL | same | same |
+| `NEXT_PUBLIC_ORDER_FORM_URL` | the Starter checkout URL | a test-mode checkout if you have one | same as Preview |
+| `NEXT_PUBLIC_GO_LIVE` | e.g. `3 to 5 business days` | same | same |
+| `NEXT_PUBLIC_GTM_ID` | the GTM container ID, or leave unset | leave unset | leave unset |
+| `NEXT_PUBLIC_SITE_URL` | **leave unset** | leave unset (previews use their branch URL automatically) | leave unset |
+| `ALLOW_PLACEHOLDERS` | **never set** | `1` | `1` |
 
-Values are read at build time. After changing one, redeploy (Deployments > the latest > **Retry deployment**).
+Keep **Automatically expose System Environment Variables** on (Settings > Environment Variables, it is on by default). On previews, `site.config.ts` reads `NEXT_PUBLIC_VERCEL_ENV` and `NEXT_PUBLIC_VERCEL_BRANCH_URL` so canonicals, OG images and the sitemap point at the preview URL instead of the live domain. Vercel also sends `X-Robots-Tag: noindex` on preview deployments, so previews stay out of search.
+
+`vercel env pull .env.local` fetches the Development values for local builds.
 
 ## 4. Custom domain, apex and www
 
-1. Workers & Pages > `maeday` > **Custom domains** > **Set up a custom domain** > `propertymanagementafterhoursansweringservice.com` > **Activate domain**. Cloudflare adds the proxied CNAME at the apex for you (CNAME flattening).
-2. Add `www.propertymanagementafterhoursansweringservice.com` as a second custom domain the same way.
-3. Redirect `www` to the apex (one canonical host): in the `propertymanagementafterhoursansweringservice.com` zone > **Rules** > **Redirect Rules** > **Create rule** (single redirect):
-   - Name: `www to apex`
-   - When incoming requests match: Custom filter expression: `(http.host eq "www.propertymanagementafterhoursansweringservice.com")`
-   - Then: Type **Dynamic**, Expression: `concat("https://propertymanagementafterhoursansweringservice.com", http.request.uri.path)`, Status code **301**, **Preserve query string** on.
-4. SSL/TLS > **Edge Certificates**: **Always Use HTTPS** on. HSTS is already sent by `public/_headers`; do not also enable HSTS preload in the dashboard until the site has been stable for a few weeks.
+1. Project > **Settings** > **Domains** > add `propertymanagementafterhoursansweringservice.com`. Vercel shows the DNS records it needs, usually an `A` record for the apex (`76.76.21.21`); use exactly what it shows.
+2. Add `www.propertymanagementafterhoursansweringservice.com` too, and choose **Redirect to** `propertymanagementafterhoursansweringservice.com` with **301 Moved Permanently**. Vercel shows the record, usually a `CNAME` to `cname.vercel-dns.com`.
+3. In Cloudflare, zone `propertymanagementafterhoursansweringservice.com` > **DNS** > **Records**, add those records with Proxy status **DNS only** (grey cloud). Proxying through Cloudflare in front of Vercel breaks Vercel's certificate issuance and doubles the caching layers.
+4. Back in Vercel, wait for both domains to show **Valid Configuration**; Vercel issues the certificates.
+5. If Cloudflare shows SSL/TLS settings for the zone, they do not apply to DNS-only records. Leave them.
 
-## 5. callmaeday.com and getmaeday.com redirect rule
+## 5. callmaeday.com and getmaeday.com
 
-Andy buys both on Cloudflare Registrar (Domain Registration > Register Domains). Each becomes its own zone. For **each** of `callmaeday.com` and `getmaeday.com`:
+Andy buys both on Cloudflare Registrar. Pick one of these and do it for both domains.
 
-1. **DNS** > **Records** > add two proxied records so Cloudflare answers for the domain (the target is never reached, the redirect fires first):
-   - Type `A`, Name `@`, IPv4 `192.0.2.1`, Proxy status **Proxied**
-   - Type `A`, Name `www`, IPv4 `192.0.2.1`, Proxy status **Proxied**
-2. **Rules** > **Redirect Rules** > **Create rule**:
-   - Name: `to main site`
-   - When incoming requests match: **All incoming requests**
-   - Then: Type **Dynamic**, Expression: `concat("https://propertymanagementafterhoursansweringservice.com", http.request.uri.path)`, Status code **301**, **Preserve query string** on.
-3. SSL/TLS: mode **Full**, **Always Use HTTPS** on (the Universal certificate covers `@` and `www`).
+**Option A, in Vercel (recommended: every domain managed in one place).**
 
-So `https://callmaeday.com/pricing/?utm_source=card` lands on `https://propertymanagementafterhoursansweringservice.com/pricing/?utm_source=card`. The site's `site.shortDomain` is `callmaeday.com`; use it on print and in the voice agent's sign-off.
+1. Project > **Settings** > **Domains** > add `callmaeday.com` > **Redirect to** `propertymanagementafterhoursansweringservice.com`, **301 Moved Permanently**. Add `www.callmaeday.com` the same way.
+2. In the Cloudflare zone for `callmaeday.com`, add the records Vercel shows (apex `A`, `www` `CNAME`), **DNS only**.
+3. Repeat for `getmaeday.com` and `www.getmaeday.com`.
 
-Alternative if you prefer one place for both: **Bulk Redirects** at account level (Account Home > Bulk Redirects), a list with `callmaeday.com` and `getmaeday.com` as source URLs, target the apex, 301, with "Preserve path suffix", "Include subdomains" and "Preserve query string" on. The DNS records in step 1 are still needed.
+**Option B, in Cloudflare (no Vercel changes).** In each zone: DNS > add proxied `A` records for `@` and `www` to `192.0.2.1` (orange cloud; the redirect fires before the target is reached). Rules > **Redirect Rules** > Create rule: All incoming requests; Type **Dynamic**; Expression `concat("https://propertymanagementafterhoursansweringservice.com", http.request.uri.path)`; Status **301**; **Preserve query string** on. SSL/TLS **Full**, **Always Use HTTPS** on.
+
+Either way `https://callmaeday.com/pricing/?utm_source=card` must land on `https://propertymanagementafterhoursansweringservice.com/pricing/?utm_source=card`. Check with the curl lines in section 7. `site.shortDomain` is `callmaeday.com`; use it on print and in the voice agent's sign-off.
 
 ## 6. Let the crawlers in
 
-`public/robots.txt` allows GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended and Bingbot. Cloudflare can block them before they read it. In the apex zone:
+`robots.txt` allows GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended and Bingbot. Make sure nothing in front of the site blocks them:
 
-1. **Security** > **Bots**: **Bot Fight Mode** off (it challenges many legitimate crawlers). If the account has Super Bot Fight Mode, set "Definitely automated" to Allow and leave "Verified bots" allowed.
-2. **AI Crawl Control** (or Security > Bots > "Block AI bots" on older dashboards): set to **do not block**, and make sure no AI crawler is set to Block. Turn off the **managed robots.txt** option so Cloudflare does not prepend its own disallow rules to `robots.txt`.
-3. **Security** > **WAF** > custom rules: none that challenge these user agents.
+1. Vercel project > **Firewall**: **Attack Challenge Mode** off. Under **Bot Management** (or **Rules** > managed rulesets), leave **Bot Protection** off or on log only, and do not enable the **AI Bots** ruleset (it blocks AI crawlers). No custom rule that challenges these user agents.
+2. Settings > **Deployment Protection**: Vercel Authentication may stay on for **Preview** deployments; it must not apply to **Production**.
+3. Cloudflare: with DNS-only records, Cloudflare's bot settings do not touch the site. If anyone later turns the proxy on, turn off Bot Fight Mode and AI crawler blocking there too.
 
-Confirm with each user agent (expect `HTTP/2 200` and the page, not a 403 or a challenge):
+Confirm with each user agent (expect `200`, not `403` or a challenge page):
 
 ```bash
 for ua in GPTBot OAI-SearchBot ChatGPT-User ClaudeBot Claude-SearchBot Claude-User PerplexityBot Google-Extended Applebot-Extended Bingbot; do
@@ -95,16 +87,16 @@ curl -s https://propertymanagementafterhoursansweringservice.com/robots.txt
 
 ## 7. Live checks
 
-Run all of these against the live apex after the production deploy.
+Run these against the live apex after the production deploy.
 
 ```bash
 SITE=https://propertymanagementafterhoursansweringservice.com
 
-# Headers: HSTS, nosniff, Referrer-Policy, Permissions-Policy, CSP on a page
+# Headers: HSTS, nosniff, Referrer-Policy, Permissions-Policy, CSP, frame options
 curl -sI $SITE/ | grep -iE 'strict-transport|x-content-type|referrer-policy|permissions-policy|content-security|x-frame'
 
 # Long cache on built assets
-curl -sI "$SITE$(curl -s $SITE/ | grep -o '/_next/static/[^"]*\.css' | head -1)" | grep -i cache-control
+curl -sI "$SITE$(curl -s $SITE/ | grep -o '/_next/static/chunks/[^"]*\.js' | head -1)" | grep -i cache-control
 
 # llms files served as text/plain
 curl -sI $SITE/llms.txt | grep -i content-type
@@ -114,10 +106,11 @@ curl -sI $SITE/llms-full.txt | grep -i content-type
 curl -sI $SITE/opengraph-image | grep -i content-type
 curl -sI $SITE/pricing/opengraph-image | grep -i content-type
 
-# 404 page with a 404 status
+# 404 page with a 404 status; missing trailing slash redirects
 curl -s -o /dev/null -w '%{http_code}\n' $SITE/no-such-page/
+curl -sI $SITE/pricing | grep -iE '^(HTTP|location)'
 
-# Redirects (expect 301 to the apex, path and query kept)
+# Domain redirects (expect 301 to the apex, path and query kept)
 curl -sI https://www.propertymanagementafterhoursansweringservice.com/pricing/ | grep -iE '^(HTTP|location)'
 curl -sI "https://callmaeday.com/pricing/?utm_source=test" | grep -iE '^(HTTP|location)'
 curl -sI "https://getmaeday.com/" | grep -iE '^(HTTP|location)'
@@ -129,15 +122,21 @@ curl -s $SITE/6f1d2c9a4b8e4f0e9d3a7c5b2e1f8a40.txt    # expect the key
 
 Then:
 
-1. **Lighthouse on the live URL**, mobile, every page: `node scripts/lighthouse.mjs` runs against a local server, so for live use PageSpeed Insights (https://pagespeed.web.dev/) on each URL in the sitemap, or `npx lighthouse $SITE/ --form-factor=mobile`. Target 95+ in all four categories, LCP 1.8 s or less, CLS 0.05 or less. Record the results in `BUILD_LOG.md`.
+1. **Lighthouse on the live URL**, mobile, every sitemap page: PageSpeed Insights (https://pagespeed.web.dev/) or `npx lighthouse $SITE/ --form-factor=mobile`. Target 95+ in all four categories, LCP 1.8 s or less, CLS 0.05 or less. Record the results in `BUILD_LOG.md`.
 2. **Structured data**: run the home, pricing, one segment, one compare page and the guide through Google's Rich Results Test (https://search.google.com/test/rich-results) and https://validator.schema.org/. Expect FAQPage, BreadcrumbList, Product (pricing) and Article (guide) detected, no errors.
-3. **Booking modal**: on the live site, click "Book a setup call" with `?utm_source=test` on the URL. The calendar must load in the modal (if it is blank, the calendar host is missing from `frame-src` in `public/_headers`, or the calendar refuses framing). Make a test booking and confirm the UTM and `source_page` reached the calendar.
+3. **Booking modal**: on the live site, add `?utm_source=test` to the URL and click "Book a setup call". The calendar must load in the modal. If the modal is blank, the calendar's host is missing from `frame-src` in `vercel.json` (and `public/_headers`), or the calendar refuses framing. Make a test booking and confirm the UTM and `source_page` reached the calendar.
 4. **Demo line**: tap "Hear a sample call" on a phone; Mae should answer as Oak Street Property Management.
-5. **Starter order**: complete a test order; it must land on `/thank-you/` and fire `purchase_complete` once (check with GTM preview if GTM is on).
+5. **Starter order**: complete a test order; it must land on `/thank-you/` and fire `purchase_complete` once (check in GTM preview if GTM is on).
 6. **IndexNow ping**: `npm run indexnow` (expect `200` or `202`).
-7. **Search Console and Bing Webmaster Tools** (Andy): verify the domain (DNS TXT record in Cloudflare), submit `https://propertymanagementafterhoursansweringservice.com/sitemap.xml` in both.
+7. **Search Console and Bing Webmaster Tools** (Andy): verify the domain with a DNS TXT record in Cloudflare and submit `https://propertymanagementafterhoursansweringservice.com/sitemap.xml` in both.
 8. Tag the release: `git tag v1.0.0 && git push origin v1.0.0`.
 
-## 8. Vercel (alternative)
+## 8. Notes for Vercel
 
-`vercel.json` mirrors `public/_headers`. Import the repo in Vercel (framework Next.js, defaults), add the same variables per environment (Production and Preview), and point the domain there instead. The redirect rules for `callmaeday.com` and `getmaeday.com` stay in Cloudflare either way.
+- **CSP and the Vercel Toolbar.** The CSP in `vercel.json` does not allow `vercel.live`, so the Vercel Toolbar (comments on preview deployments) is blocked by the browser. Either turn the toolbar off (Settings > General > Vercel Toolbar) or add `https://vercel.live` to `script-src`, `frame-src` and `connect-src` for previews. Production does not need it.
+- **No server features.** The site is a static export: no Functions, no Middleware, no ISR. Vercel's free Hobby plan is for non-commercial use; a commercial site belongs on Pro.
+- **Analytics.** GTM loads only when `NEXT_PUBLIC_GTM_ID` is set. Vercel Web Analytics is not wired in; adding it needs its script host in the CSP.
+
+## 9. Cloudflare Pages (fallback)
+
+If the site ever moves to Cloudflare Pages: Workers & Pages > Create > Pages > Connect to Git, framework preset **None**, build command `npm run build`, output directory `out`, environment variable `NODE_VERSION=22` plus the variables in section 3 (`ALLOW_PLACEHOLDERS=1` on Preview only, and `NEXT_PUBLIC_SITE_URL` set to the preview URL on Preview). Headers come from `public/_headers`. Add the apex and `www` under Custom domains, and use a Redirect Rule for `www` to the apex and option B in section 5 for the short domains.

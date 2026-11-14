@@ -34,13 +34,22 @@ const plans: Plan[] = [
   { id: 'portfolio', name: 'Portfolio', price: 797, minutes: 2500, approxCalls: 800, overagePerMinute: 0.25, blurb: 'For larger portfolios and lines answered 24/7 on request.' },
 ];
 
+/**
+ * On Vercel preview deployments, canonicals, OG images and the sitemap point at the branch's preview URL
+ * (Vercel's system variables, exposed by default). NEXT_PUBLIC_SITE_URL overrides it; production uses the apex.
+ */
+const vercelPreviewUrl =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' && process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
+    : '';
+
 // Each variable is read by its literal name so Next.js can inline it into client code.
 export const site = {
   name: 'MaeDay',
   persona: 'Mae',
   tagline: "When it's a mayday, Mae answers.",
   descriptor: 'After-hours answering for property managers',
-  domain: env(process.env.NEXT_PUBLIC_SITE_URL, 'https://propertymanagementafterhoursansweringservice.com').replace(/\/+$/, ''),
+  domain: env(process.env.NEXT_PUBLIC_SITE_URL, vercelPreviewUrl || 'https://propertymanagementafterhoursansweringservice.com').replace(/\/+$/, ''),
   shortDomain: 'callmaeday.com', // 301 to the main domain, Cloudflare redirect rule (getmaeday.com too)
   owner: 'Antek Automation', // never "Ltd" or "Limited"
   founder: 'Andy Norman',

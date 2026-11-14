@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Marketing site for **MaeDay** (propertymanagementafterhoursansweringservice.com): after-hours answering for US property managers, a service of Antek Automation. Mae, an AI voice agent, answers calls when the office is closed, sends emergencies to the on-call tech by the manager's own rules with retries and a backup, logs the rest for the morning and emails a timestamped log. Primary CTA: book a 20-minute setup call. Static Next.js (App Router, `output: 'export'`, `trailingSlash: true`), TypeScript, Tailwind CSS v4. Hosted on Cloudflare Pages (`npm run build`, output `out/`, headers in `public/_headers`); `vercel.json` mirrors the headers. No server runtime: nothing may need one. No Astro.
+Marketing site for **MaeDay** (propertymanagementafterhoursansweringservice.com): after-hours answering for US property managers, a service of Antek Automation. Mae, an AI voice agent, answers calls when the office is closed, sends emergencies to the on-call tech by the manager's own rules with retries and a backup, logs the rest for the morning and emails a timestamped log. Primary CTA: book a 20-minute setup call. Static Next.js (App Router, `output: 'export'`, `trailingSlash: true`), TypeScript, Tailwind CSS v4. Hosted on **Vercel** (`npm run build`, static export served from `out/`, headers in `vercel.json`; Node 22). `public/_headers` mirrors the headers so Cloudflare Pages still works as a fallback: keep the two in sync. No server runtime: no Functions, Middleware or ISR; nothing may need one. No Astro. Deploy steps: `docs/DEPLOY.md`.
 
 `docs/BUILD_MAEDAY_SITE.md` is the source of truth for product, routes, page specs and rules. `docs/RESEARCH.md` holds keywords and the original research. `BUILD_LOG.md` records every source and competitor fact with its check date, open placeholders, items for Andy to review and next pages.
 
@@ -13,6 +13,7 @@ Marketing site for **MaeDay** (propertymanagementafterhoursansweringservice.com)
 - `src/lib/schema.ts`: JSON-LD built from the same data the page renders. Visible `<Faq>` and FAQPage JSON-LD render from one array. Never Review or AggregateRating.
 - `src/app/globals.css`: brand tokens in `@theme` (Midnight, Night, Porch Amber, Amber Deep, Daylight, Slate, Line, Dusk, Signal, Reached). `src/lib/fonts.ts`: Bricolage Grotesque, Instrument Sans, IBM Plex Mono from @fontsource.
 - `reference/design/*.dc.html`: design source (Main = brand board, Home, Pricing, Apartments = segment template, CompareSmithAi = compare template); `canvas.json` has per-page SEO notes. `reference/logo/`: the marks.
+- `scripts/defer-scripts.mjs` (postbuild): loads the Next.js runtime chunks after first paint. If a Next.js upgrade changes how scripts are emitted, check it still finds them (the Playwright test "runtime loads after first paint" fails if not).
 - `scripts/check.ts`: the checks. `scripts/check-selftest.ts`: proves each rule fails. `scripts/schema-validate.ts`: JSON-LD. `scripts/generate-llms.ts`: `llms.txt` and `llms-full.txt` (prebuild, gitignored). `scripts/lighthouse.mjs`, `scripts/indexnow.ts`.
 
 ## Copy rules (enforced by `scripts/check.ts` where a machine can check them)
