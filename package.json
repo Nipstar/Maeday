@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "icons": "node scripts/make-icons.mjs",
     "preview": "npx serve out",
-    "indexnow": "tsx scripts/indexnow.ts"
+    "indexnow": "tsx scripts/indexnow.ts",
+    "schema": "tsx scripts/schema-validate.ts"
   },
   "dependencies": {
     "next": "^16.4.6",

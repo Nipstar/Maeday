@@ -25,6 +25,7 @@ import { site } from '../src/site.config';
 import { allowedMinutes, allowedPrices } from '../src/lib/format';
 import { competitors } from '../src/content/competitors';
 import { comparePages } from '../src/content/compare';
+import { validateBlock } from './schema-validate';
 
 const SOURCE_ONLY = process.argv.includes('--source');
 const ALLOW_PLACEHOLDERS = process.env.ALLOW_PLACEHOLDERS === '1';
@@ -203,6 +204,7 @@ function jsonLdCheck(file: string, html: string) {
       fail(file, `JSON-LD does not parse: ${(e as Error).message}`);
       continue;
     }
+    for (const e of validateBlock(data)) fail(file, `JSON-LD ${data['@type']}: ${e}`);
     if (data['@type'] === 'FAQPage') {
       for (const q of data.mainEntity ?? []) faqLd.push({ q: q.name.trim(), a: q.acceptedAnswer.text.trim() });
     }
@@ -297,6 +299,17 @@ if (!SOURCE_ONLY) {
     logCheck(file, html);
     if (route.startsWith('/compare/')) compareCheck(file, html);
     if (!file.endsWith('404.html') && !file.includes('_not-found')) metaCheck(file, html);
+  }
+  for (const f of ['llms.txt', 'llms-full.txt']) {
+    const path = join(OUT, f);
+    if (!existsSync(path)) {
+      fail(path, 'missing');
+      continue;
+    }
+    const text = readFileSync(path, 'utf8').replace(PLACEHOLDER, '');
+    wordCheck(path, text);
+    if (/!/.test(text.replace(/\]\(https?:[^)]*\)/g, ''))) fail(path, 'exclamation mark');
+    figureCheck(path, text.replace(/https?:\/\/\S+/g, ''));
   }
   if (placeholders.size) {
     const list = [...placeholders].map(([k, files]) => `  ${k}  (${files.size} page${files.size > 1 ? 's' : ''})`).join('\n');

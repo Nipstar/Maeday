@@ -172,6 +172,32 @@ Not built (per the run instructions; listed under Next pages): the three remaini
 
 Checks: build and check pass on 18 pages. No horizontal scroll at 375 px.
 
+## Phase 6: Schema, llms, robots, sitemap, OG (14 November 2026)
+
+Built:
+- JSON-LD builders in `src/lib/schema.ts`, all from the data each page renders: Organization (MaeDay, `parentOrganization` Antek Automation, `founder` Andy Norman), WebSite, WebPage (SpeakableSpecification on the home AnswerBlock and H1), Service with three Offers (home, service, segments), Product with three Offers and monthly plus per-minute `UnitPriceSpecification` (pricing), FAQPage (same `plain()` text as the visible FAQ), BreadcrumbList (every page below home), Article (guide: author Andy Norman, datePublished, dateModified, citations), AboutPage. No Review or AggregateRating anywhere.
+- `scripts/schema-validate.ts` (`npm run schema`): parses every block and checks the properties Google's structured-data docs require per type. Wired into `check.ts`.
+- `public/llms.txt` and `llms-full.txt` generated at prebuild from content: fixed description, plans and billing from config, what Mae won't do, every page with its AnswerBlock as the summary, contact; the full file adds every page's copy, competitor facts with URLs and check dates, and sources. `check.ts` now runs the copy rules on both files.
+- `robots.txt` allows `*` plus GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended and Bingbot, with a `Sitemap:` line.
+- `sitemap.xml`: 13 indexable pages with `lastmod` from `site.lastUpdatedIso` (thank-you, privacy and terms left out).
+- OG images per page (`opengraph-image.tsx`, 1200 x 630, Midnight, lit-window mark, page title, "From $197/mo" from config) for home, pricing, service, every segment, every compare page, hub, guide and about.
+- IndexNow: key file `public/<key>.txt` and `npm run indexnow` (post-deploy ping of every indexable URL).
+
+JSON-LD validation (`npm run schema`, 14 Nov 2026): 18 of 18 HTML files pass.
+
+| Page | Types |
+|---|---|
+| `/` | WebPage (speakable), Service, FAQPage, Organization, WebSite |
+| `/pricing/` | WebPage, Product, FAQPage, BreadcrumbList, Organization, WebSite |
+| `/emergency-maintenance-answering/` | WebPage, Service, FAQPage, BreadcrumbList, Organization, WebSite |
+| `/apartments/`, `/hoa/`, `/single-family-rentals/`, `/student-housing/` | WebPage, Service, FAQPage, BreadcrumbList, Organization, WebSite |
+| `/best-property-management-answering-service/`, `/compare/smith-ai/`, `/compare/specialty-answering-service/` | WebPage, FAQPage, BreadcrumbList, Organization, WebSite |
+| `/guides/what-counts-as-a-maintenance-emergency/` | Article, FAQPage, BreadcrumbList, Organization, WebSite |
+| `/about/` | AboutPage, BreadcrumbList, Organization, WebSite |
+| `/thank-you/`, `/privacy/`, `/terms/`, 404 | Organization, WebSite |
+
+Google's Rich Results Test and validator.schema.org could not be reached from the build container; run the live URLs through both after deploy (see `docs/DEPLOY.md`).
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.

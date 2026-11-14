@@ -1,5 +1,5 @@
 import { site, type Plan } from '@/site.config';
-import { plain } from '@/lib/rich';
+import { plain } from '@/lib/links';
 import type { Faq } from '@/content/types';
 
 /** JSON-LD builders. Every builder takes the same data the page renders, so the two cannot drift. Never Review or AggregateRating. */
