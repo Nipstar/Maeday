@@ -1,0 +1,29 @@
+# Cloudflare Pages headers. Vercel uses vercel.json instead: keep the two in sync.
+# CSP allows the setup-call calendar (GHL booking widget on crm.antekautomation.com, LeadConnector,
+# form_embed.js from link.msgsndr.com) and Google Tag Manager. 'unsafe-inline' for scripts is required
+# by the Next.js static export (inline hydration data). If the calendar uses another host, add it here.
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), geolocation=(), payment=(), usb=(), microphone=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://link.msgsndr.com https://*.leadconnectorhq.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.leadconnectorhq.com https://*.msgsndr.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com; frame-src 'self' https://crm.antekautomation.com https://*.leadconnectorhq.com https://*.msgsndr.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+
+# OG images are exported without a file extension (Next.js static export): serve them as PNG.
+/opengraph-image
+  Content-Type: image/png
+/*/opengraph-image
+  Content-Type: image/png

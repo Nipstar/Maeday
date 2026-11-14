@@ -1,0 +1,46 @@
+{
+  "name": "maeday-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "llms": "tsx scripts/generate-llms.ts",
+    "prebuild": "tsx scripts/generate-llms.ts && tsx scripts/check.ts --source",
+    "build": "next build",
+    "postbuild": "tsx scripts/check.ts",
+    "check": "tsx scripts/check.ts && npm run lint && npm run typecheck",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "icons": "node scripts/make-icons.mjs",
+    "preview": "npx serve out",
+    "indexnow": "tsx scripts/indexnow.ts"
+  },
+  "dependencies": {
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@fontsource/bricolage-grotesque": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/instrument-sans": "^5.3.0",
+    "@next/env": "^16.4.6",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.6",
+    "lighthouse": "^12.8.2",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.5",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=20.9"
+  }
+}

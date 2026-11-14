@@ -1,0 +1,129 @@
+@import 'tailwindcss';
+
+/* Brand tokens (reference/design/Main.dc.html, docs/BUILD_MAEDAY_SITE.md "Brand tokens") */
+@theme {
+  --color-midnight: #10182b; /* text, the mark, dark bands, footer */
+  --color-night: #1e2a44; /* cards and tiles on Midnight */
+  --color-amber: #f2a93b; /* primary button (Midnight text), the lit window. One per screen */
+  --color-amber-deep: #8f5200; /* links and eyebrows on light */
+  --color-amber-hover: #6e3f00;
+  --color-daylight: #fbf8f2; /* page background */
+  --color-slate: #4a5468; /* secondary text */
+  --color-line: #e6e0d4; /* hairlines and card borders */
+  --color-line-soft: #f0ebe1;
+  --color-dusk: #e9eef8; /* neutral chips, Mae's speech bubble */
+  --color-sand: #f3eee4; /* "Logged for morning" chip */
+  --color-signal: #c2412d; /* the "Emergency" tag only */
+  --color-reached: #2e7d5b;
+  --color-reached-text: #1f5e43;
+  --color-reached-wash: #e3f1ea;
+  --color-reached-on-dark: #7fd3ad;
+  --color-mist: #aab4c8; /* secondary text on Midnight */
+  --color-fog: #c9d0dd; /* body text on Midnight */
+  --color-chalk: #e3e7ef; /* nav and chips on Midnight */
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --tracking-display: -0.035em;
+  --tracking-head: -0.03em;
+  --tracking-eyebrow: 0.1em;
+
+  --shadow-log: 0 30px 60px rgba(0, 0, 0, 0.35);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-daylight font-sans text-midnight antialiased;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    letter-spacing: var(--tracking-head);
+    text-wrap: balance;
+  }
+  a {
+    color: var(--color-amber-deep);
+  }
+  a:hover {
+    color: var(--color-amber-hover);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-amber-deep);
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-amber);
+  }
+  details > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  [id] {
+    scroll-margin-top: 24px;
+  }
+  table {
+    border-collapse: collapse;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[1200px] px-4 md:px-6;
+  }
+  .eyebrow {
+    @apply mb-3 font-mono text-[13px] font-medium tracking-eyebrow uppercase;
+  }
+  .mono {
+    @apply font-mono font-medium;
+  }
+  .faq-plus {
+    transition: transform 150ms ease;
+  }
+  details[open] > summary .faq-plus {
+    transform: rotate(45deg);
+  }
+  .menu[open] > summary .menu-chevron {
+    transform: rotate(180deg);
+  }
+  .scroll-x {
+    @apply w-full overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .no-print,
+  [data-sticky-cta] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

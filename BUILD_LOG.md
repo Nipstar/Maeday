@@ -109,6 +109,22 @@ Legal, statistical and buyer sources:
 
 Network note: the build container's default network allows package registries only. A personal environment named `maeday` was created with the 20 source hosts allowed so the sources could be fetched. Justia, nyc.gov, Trustpilot and dialbox.us still refuse automated requests.
 
+## Phase 1: Scaffold, config and brand (14 November 2026)
+
+Built:
+- Next.js 16 App Router, `output: 'export'`, `trailingSlash: true`, TypeScript, Tailwind v4, copied structure from ai-receptionist (configs, `load-env.ts`, `check.ts` pattern, JSON-LD builders, `_headers` + `vercel.json`).
+- `src/site.config.ts` with the brief's shape, plus `sources` (every legal and buyer source with its check date), `sourceFigures`, `timing`, `flags` (all false, plus `vendorDispatch` and `ownerReport`) and `sister` (cross-link).
+- `src/content/competitors.ts`: verified rows only (Smith.ai AI, Smith.ai receptionists, Ruby, MAP, PATLive, Abby, Specialty Answering Service, Buildium Maintenance Contact Center, Property Meld MAX On-Call), each with `url` and `checked`.
+- `src/lib/format.ts`: `money`, `rate`, `fill()` tokens for plans, setup fee, billing, placeholders, sources and every competitor figure; `allowedPrices()` and `allowedMinutes()` feed the check.
+- Brand tokens in `globals.css`, fonts self-hosted from @fontsource through `next/font/local` (display face preloaded only), logo marks in `reference/logo/` (`mark.svg`, `mark-light.svg`, `mark-small.svg` for the thicker favicon stroke) and `npm run icons` for `icon.svg`, `apple-icon.png`, `favicon.ico`.
+- `Header` (Midnight, native `<details>` menus), `Footer` (service line, sister-site link), `StickyCta` (mobile, after `[data-hero]` leaves view), `BookLink` + `BookingModal` (iframe and `form_embed.js` load on first click), `CallLink`, `StartLink`, UTM capture, GTM (off unless set), `.env.example`, `public/_headers`, `vercel.json`.
+- `scripts/check.ts` with all nine rules from the brief, plus: "24/7" only as "24/7 on request", phone numbers in copy must be 555 numbers, every indexable page has "Last updated", every call log carries its "invented" label. Flag rule skips elements marked `data-gate-ok` (limits, "not yet" answers, competitor facts).
+- `scripts/lighthouse.mjs`: Lighthouse mobile on every sitemap page against `out/`.
+
+Checks: `ALLOW_PLACEHOLDERS=1 npm run build` and `ALLOW_PLACEHOLDERS=1 npm run check` pass (placeholders listed as warnings).
+
+Lighthouse mobile, placeholder home (local static server, simulated throttling): Performance 96, Accessibility 100, Best practices 100, SEO 100, CLS 0, LCP 2.6 s (target 1.8 s, revisited in Phase 7).
+
 ## For Andy to review
 
 - Phase 0: the corrected Property Meld price ($1.50/unit add-on plus Ops), the changed Smith.ai AI terms (per-call live agent add-on, Spanish included, no money-back on the AI page), and the sources left out (NYC heat rules, both Trustpilot complaints, AnswerConnect).
