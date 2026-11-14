@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { isPlaceholder, site } from '@/site.config';
 import { segments } from '@/content/segments';
 import { comparePages } from '@/content/compare';

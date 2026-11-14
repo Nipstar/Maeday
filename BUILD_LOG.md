@@ -229,6 +229,41 @@ Lighthouse mobile, 14 Nov 2026 (local static server, simulated throttling):
 
 All pages meet 95+ in every category and CLS 0.05 or less. Not met: the brief's LCP target of 1.8 s. The simulated LCP (2.3 to 2.9 s) tracks the Next.js runtime scripts (about 150 KB compressed), not the content: observed LCP in the same traces is about 0.2 s, and preloading or `font-display: optional` did not change it. Performance scores varied by up to 4 points between runs. Re-run on the live Cloudflare URL (HTTP/2, Brotli, edge cache) after deploy.
 
+## Phase 7 fix: Lighthouse on CI (14 November 2026)
+
+The first CI run on PR #1 passed everything except Lighthouse. On GitHub's runner `/` scored 89 for performance, `/hoa/` and the guide 94, and `/hoa/` had CLS 0.063 (limit 0.05). The local scores reported above (95 to 97) did not hold there.
+
+Causes found:
+- LCP (simulated) followed the Next.js runtime: its seven chunks were requested from `<head>`, so Lighthouse's model counted their download and execution before the largest paint. Observed paint was about 0.2 s.
+- CLS came from the body font (Instrument Sans) arriving late with `font-display: swap` and re-wrapping the hero text and call log.
+
+Changes:
+- `scripts/defer-scripts.mjs` (runs in `postbuild`, before the checks): moves the Next.js runtime chunks from `<head>` to a small loader that starts them just after the first frame is painted. The HTML is fully server-rendered, so nothing visible waits for them, and hydration buffers its data until they arrive. Tested: a new Playwright test confirms the loader is present, the chunks load, and five pages hydrate with no console errors; all 130 browser tests pass. Trade-off: a click on "Book a setup call" or "Start Starter now" in the first fraction of a second, before the runtime arrives, follows the plain link (the right destination, but without the UTM parameters and without the modal).
+- Body and mono fonts now use `font-display: optional` (no swap after first paint). The display face that sets the headings keeps `swap` and is the only one preloaded, as the brief says. **Deviation from the brief** ("font-display: swap" for all): with swap, CLS went over 0.05 on slower machines.
+- Internal links are plain `<a>` (`src/components/Link.tsx`) instead of `next/link`: full page loads from the CDN, no background prefetching of every header and footer link.
+- `experimental.inlineCss` in `next.config.ts`: the stylesheet is inlined, removing one render-blocking request.
+- `scripts/lighthouse.mjs`: a page that misses 95 is run twice more and judged on the median of three (Lighthouse's own advice for run-to-run variance). One-off spikes were seen locally, for example a single 310 ms blocking-time run on `/compare/smith-ai/` that scored 93 and 99 on the next three runs.
+- CI uploads the Lighthouse reports (`include-hidden-files: true`; the hidden folder was skipped before).
+
+Lighthouse mobile after the fix, 14 Nov 2026 (local, simulated throttling, all pages passed on the first run):
+
+| Page | Perf | A11y | Best practices | SEO | LCP | CLS |
+|---|---|---|---|---|---|---|
+| `/` | 97 | 100 | 100 | 100 | 1.7 s | 0 |
+| `/pricing/` | 97 | 100 | 100 | 100 | 1.8 s | 0 |
+| `/emergency-maintenance-answering/` | 95 | 100 | 100 | 100 | 2.3 s | 0 |
+| `/apartments/` | 98 | 100 | 100 | 100 | 1.8 s | 0 |
+| `/hoa/` | 99 | 100 | 100 | 100 | 1.7 s | 0 |
+| `/single-family-rentals/` | 96 | 100 | 100 | 100 | 2.7 s | 0 |
+| `/student-housing/` | 98 | 100 | 100 | 100 | 2.0 s | 0 |
+| `/best-property-management-answering-service/` | 99 | 100 | 100 | 100 | 1.5 s | 0 |
+| `/compare/smith-ai/` | 99 | 100 | 100 | 100 | 1.7 s | 0 |
+| `/compare/specialty-answering-service/` | 99 | 100 | 100 | 100 | 1.7 s | 0 |
+| `/guides/what-counts-as-a-maintenance-emergency/` | 99 | 100 | 100 | 100 | 1.4 s | 0 |
+| `/about/` | 100 | 100 | 100 | 100 | 1.5 s | 0 |
+
+LCP is at or under 1.8 s on 8 of 12 pages in this run and varies by up to a second between runs; it is no longer tied to the scripts.
+
 ## Phase 8: Deploy (not run)
 
 Per the run instructions, nothing was deployed. `docs/DEPLOY.md` has the exact Cloudflare Pages steps (project settings, build command and output, `NODE_VERSION=22`), environment variables per environment (`ALLOW_PLACEHOLDERS=1` on Preview only, `NEXT_PUBLIC_SITE_URL` on Preview only), the apex and `www` setup, the `callmaeday.com` and `getmaeday.com` 301 redirect rule (single redirect per zone, or Bulk Redirects), crawler access (Bot Fight Mode, AI crawl blocking, managed robots.txt) with a per-user-agent curl loop, and the live checks: headers, `llms.txt` as `text/plain`, OG images as PNG, 404 status, redirects, sitemap count, Lighthouse on the live URL, Rich Results Test, booking modal, demo line, Starter test order, IndexNow ping, Search Console and Bing. Tag `v1.0.0` after they pass.
@@ -264,7 +299,8 @@ Per the run instructions, nothing was deployed. `docs/DEPLOY.md` has the exact C
 - HOA copy is new (no canvas board). The HOA example association "Pine Ridge Townhomes" puts "the community's own tech" first on the ladder, not an outside vendor, because vendor dispatch is behind a false flag.
 - Apartments FAQ "Which plan fits a 120-unit community?" no longer says "Most single communities start on Starter" (no data behind it); it gives the Starter numbers and offers to size it on the call.
 - About says Mae runs on Retell with Twilio. Remove if you prefer not to name suppliers.
-- Phase 7: LCP target (1.8 s simulated) is not met; scores are 95 to 97. Options if it matters on the live site: drop the client-side router (plain `<a>` links), or move the small interactive pieces (booking modal, sticky bar, copy buttons) to one inline script.
+- Phase 7 fix: body and mono fonts use `font-display: optional` instead of the brief's `swap` (CLS). On a first, cold visit body text may show in the fallback font for that page view.
+- Phase 7 fix: the Next.js runtime loads just after first paint (`scripts/defer-scripts.mjs`). A click in the first fraction of a second goes to the plain booking or order URL without UTMs. Revisit if Next.js changes how it emits scripts (the build step only touches `/_next/static/chunks/*.js` async tags).
 - Phase 5: the template emergency list on the guide (15 rows, with "Your call" for lockouts, no hot water and AC). It is generic guidance; check it matches how you would set up a client.
 - Student housing parent-privacy wording ("Mae does not confirm whether a student lives in the community") is a product rule I wrote. Confirm the agent will behave that way.
 - Phase 4: the hub's "Not stated on their page" cells. They are accurate but make the table look one-sided; the alternative is to drop those columns for vendors whose pages say nothing.

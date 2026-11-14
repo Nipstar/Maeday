@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { Logo } from './Logo';
 import { BookLink } from './BookLink';
 import { segments } from '@/content/segments';

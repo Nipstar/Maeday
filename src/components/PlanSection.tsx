@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { site } from '@/site.config';
 import { fill, money, num, rate } from '@/lib/format';
 import { builtPages, routes } from '@/lib/routes';

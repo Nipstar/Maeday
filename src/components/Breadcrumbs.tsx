@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 
 /** Visible breadcrumb. The BreadcrumbList JSON-LD is built from the same items on each page. */
 export function Breadcrumbs({ items, dark = false }: { items: { name: string; path: string }[]; dark?: boolean }) {

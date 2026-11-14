@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 
 /** The house outline with one lit window. stroke is white on Midnight tiles, Midnight on light. */
 export function Mark({ size = 26, stroke = '#FFFFFF', strokeWidth = 2 }: { size?: number; stroke?: string; strokeWidth?: number }) {

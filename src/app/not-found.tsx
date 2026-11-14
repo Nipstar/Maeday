@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 import type { Metadata } from 'next';
 import { btn } from '@/lib/ui';
 import { BookLink } from '@/components/BookLink';

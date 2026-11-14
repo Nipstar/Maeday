@@ -51,6 +51,19 @@ for (const path of pages) {
   });
 }
 
+test('runtime loads after first paint and hydrates without console errors', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(e.message));
+  for (const path of ['/', '/pricing/', '/hoa/', '/compare/smith-ai/', '/guides/what-counts-as-a-maintenance-emergency/']) {
+    await page.goto(path, { waitUntil: 'networkidle' });
+    expect(await page.locator('head script[src*="/_next/static/chunks/"][async]').count()).toBe(0);
+    expect(await page.locator('script[data-deferred-runtime]').count()).toBe(1);
+    await expect.poll(() => page.evaluate(() => document.querySelectorAll('script[src*="/_next/static/chunks/"]').length)).toBeGreaterThan(0);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('sticky CTA appears only after the hero leaves view (mobile)', async ({ page }, info) => {
   test.skip(info.project.name !== 'mobile-375', 'mobile only');
   for (const path of ['/', '/pricing/', '/apartments/']) {
@@ -76,7 +89,7 @@ test('sticky CTA is not shown on desktop', async ({ page }, info) => {
 test('booking modal loads only on click, with UTMs', async ({ page }) => {
   test.skip(!builtWithTestEnv, 'needs a build with .env.example values (a real booking URL)');
   await page.route(/example\.com|msgsndr\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/html', body: '<p>calendar</p>' }));
-  await page.goto('/pricing/?utm_source=test&utm_campaign=qa');
+  await page.goto('/pricing/?utm_source=test&utm_campaign=qa', { waitUntil: 'networkidle' });
   expect(await page.locator('iframe[data-booking-iframe]').count()).toBe(0);
   expect(await page.locator('script[src*="form_embed.js"]').count()).toBe(0);
   await page.locator('main a[data-cta="book"]').first().click();
@@ -98,7 +111,7 @@ test('Start Starter now carries UTMs to the order form', async ({ page }) => {
     hit = r.request().url();
     return r.fulfill({ status: 200, contentType: 'text/html', body: '<p>order</p>' });
   });
-  await page.goto('/pricing/?utm_source=test&gclid=abc');
+  await page.goto('/pricing/?utm_source=test&gclid=abc', { waitUntil: 'networkidle' });
   await page.locator('a[data-cta="start"]').click();
   await expect.poll(() => hit).toContain('utm_source=test');
   expect(hit).toContain('gclid=abc');

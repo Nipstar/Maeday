@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { site } from '@/site.config';
 import { hub } from '@/content/compare';
 import { getCompetitor } from '@/content/competitors';

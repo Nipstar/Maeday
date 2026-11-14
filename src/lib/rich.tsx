@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link';
 import { Fragment } from 'react';
 import { fill } from '@/lib/format';
 import { LINK, plain, richLinks } from '@/lib/links';
