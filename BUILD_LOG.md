@@ -286,16 +286,7 @@ Per the run instructions, nothing was deployed. (Superseded by the hosting chang
 | `[[EMAIL]]` | Every page (footer), about, thank-you, legal, Organization JSON-LD, llms files | `NEXT_PUBLIC_EMAIL` |
 | `[[ORDER_FORM_URL]]` | `/pricing/` | `NEXT_PUBLIC_ORDER_FORM_URL` |
 | `[[GO_LIVE]]` | `/` FAQ, `/compare/specialty-answering-service/`, `/thank-you/`, llms-full | `NEXT_PUBLIC_GO_LIVE` |
-| `[[ADDRESS]]`, `[[PHONE]]` | Every page (footer), about | `site.address`, `site.phone` |
-| `[[ANNUAL_PRICE]]` | `/pricing/` plan note and FAQ | `site.annual` |
-| `[[CONTRACT]]` | `/pricing/` FAQ, `/compare/smith-ai/` table | `site.contract` |
-| `[[ROLLOVER]]` | `/pricing/` minute list and FAQ | `site.rollover` |
-| `[[PORTFOLIO_EXTRA]]` | `/pricing/` Portfolio card | `site.portfolioExtra` |
-| `[[CONCURRENT_CALLS]]` | `/apartments/` and `/student-housing/` FAQs and section | `site.concurrentCalls` |
-| `[[INTEGRATION_TIMING]]` | `/` FAQ | `site.timing.integration` |
-| `[[TOUR_BOOKING_TIMING]]` | `/apartments/` FAQ | `site.timing.tourBooking` |
-| `[[PRIVACY_SUMMARY]]`, `[[PRIVACY_TEXT]]` | `/privacy/` (noindex) | `src/app/privacy/page.tsx` |
-| `[[TERMS_SUMMARY]]`, `[[TERMS_TEXT]]` | `/terms/` (noindex) | `src/app/terms/page.tsx` |
+| `[[PHONE]]` | Every page (footer, hidden while unset), about | `site.phone` |
 
 ## For Andy to review
 
@@ -327,3 +318,13 @@ Not built in v1. Each needs its sources re-fetched on the day it is written.
 | `/compare/ai-answering-vs-call-center/` | Compare (category) | Owns "property management call center" (300, KD 5). Needs a source for call center pricing beyond the vendor pages already checked. |
 | `/guides/on-call-rotation-and-escalation/` | Guide | No measurable keyword. Draw on Andy's field service experience; no statistics without a source. |
 | `/commercial/` | Segment | Listed as "later" on the canvas. |
+
+## 14 November 2026: legal pages
+
+- `/privacy/` and `/terms/` written from Antek Automation's own policies, fetched 14 November 2026: https://www.antekautomation.com/privacy-policy (address, ICO ZC133436, DUNS 235593033, retention periods, UK GDPR rights) and https://www.antekautomation.com/terms-of-business (payment, 30 days' notice, liability cap, England and Wales law). Adapted for a US service: MaeDay limits, controller/processor split for client call data, US state privacy rights, US-based providers (Retell, Twilio, Vercel).
+- `site.address` filled; `site.legal` holds status, ICO and DUNS.
+- For Andy to review: both pages are drafts, not legal advice. Check governing law (England and Wales) suits US clients, the retention periods (call recordings 90 days, transcripts and logs 12 months) match how Retell and the email summaries actually store data, and the email in `NEXT_PUBLIC_EMAIL` (currently `hello@example.com`). Pages stay noindex.
+- Pricing terms filled from the suggested wording: contract "Month to month, cancel with 30 days' notice" (matches the terms page), annual "12 times the monthly price", rollover "they reset on your billing date".
+- Sister-site link (footer and pricing FAQ) hidden with `site.sister.live: false` until that page is live.
+- Home FAQ on AppFolio, Buildium and Yardi now says Mae works with any property software that accepts data through an API or webhooks, set up on the setup call. `site.timing.integration` is no longer used. Andy to confirm this is offered at launch.
+- Filled: concurrent calls "20" and tour booking "planned, with no date yet" (suggested wording); Portfolio card extra "Lowest per-minute overage rate" (true from plan config). Andy to confirm Mae handles 20 calls at once on the Retell plan.

@@ -19,16 +19,19 @@ export function Footer() {
             </p>
             <p className="mt-2 mb-0 text-fog">{site.descriptor}.</p>
             <p className="mt-4 mb-0 text-sm text-mist">
-              {site.name} is a service of {site.owner}. {site.address} · {site.phone} ·{' '}
+              {site.name} is a service of {site.owner}.{' '}
+              {[site.address, site.phone].filter((v) => !isPlaceholder(v)).map((v) => `${v} · `)}
               {isPlaceholder(email) ? <span>{email}</span> : <a href={`mailto:${email}`} className={link}>{email}</a>}
             </p>
-            <p className="mt-4 mb-0 text-sm text-mist">
-              Only need a general receptionist? See the{' '}
-              <a href={site.sister.url} className="text-fog underline underline-offset-2 hover:text-white">
-                {site.sister.anchor}
-              </a>
-              .
-            </p>
+            {site.sister.live && (
+              <p className="mt-4 mb-0 text-sm text-mist">
+                Only need a general receptionist? See the{' '}
+                <a href={site.sister.url} className="text-fog underline underline-offset-2 hover:text-white">
+                  {site.sister.anchor}
+                </a>
+                .
+              </p>
+            )}
           </div>
           <nav aria-label="Service" className="flex flex-col gap-2.5">
             <span className="font-semibold text-white">Service</span>

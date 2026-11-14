@@ -1,3 +1,4 @@
+import { site } from '@/site.config';
 import type { Faq } from './types';
 
 /** Visible FAQ and FAQPage JSON-LD render from these arrays. */
@@ -13,7 +14,7 @@ export const homeFaqs: Faq[] = [
   },
   {
     q: 'Does it work with AppFolio, Buildium or Yardi?',
-    a: 'It works alongside any software today: you get an email summary for every call. Direct links into property software are {integrationTiming}.',
+    a: 'Mae works with any property software that accepts data through an API or webhooks, so call details can land where your team already works. We set this up with you on the setup call. Every call also comes with an email summary.',
     gateOk: true,
   },
   {
@@ -45,7 +46,7 @@ export const pricingFaqs: Faq[] = [
   },
   {
     q: 'Do unused minutes roll over?',
-    a: '{rollover}.',
+    a: 'No, {rollover}.',
   },
   {
     q: 'What happens if I go over my minutes?',
@@ -55,8 +56,12 @@ export const pricingFaqs: Faq[] = [
     q: 'Does 24/7 on request cost more?',
     a: 'No. Same plans, same per-minute rates. Daytime calls simply use more of your minutes.',
   },
-  {
-    q: 'Do you also offer a general receptionist?',
-    a: 'MaeDay is built for after-hours property calls. For a receptionist that answers a general business line during the day, see our {@sister}.',
-  },
+  ...(site.sister.live
+    ? [
+        {
+          q: 'Do you also offer a general receptionist?',
+          a: 'MaeDay is built for after-hours property calls. For a receptionist that answers a general business line during the day, see our {@sister}.',
+        },
+      ]
+    : []),
 ];

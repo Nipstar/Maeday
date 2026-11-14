@@ -54,8 +54,10 @@ export const site = {
   owner: 'Antek Automation', // never "Ltd" or "Limited"
   founder: 'Andy Norman',
   email: env(process.env.NEXT_PUBLIC_EMAIL, '[[EMAIL]]'),
-  address: '[[ADDRESS]]',
+  address: 'Chantry House, 38 Chantry Way, Andover SP10 1LZ, United Kingdom',
   phone: '[[PHONE]]',
+  /** Antek Automation's registration details, from antekautomation.com/privacy-policy (checked 14 November 2026) */
+  legal: { status: 'sole trader', ico: 'ZC133436', duns: '235593033' },
   demoPhone: {
     // Twilio number on the Retell demo agent ("Oak Street Property Management")
     display: env(process.env.NEXT_PUBLIC_DEMO_PHONE_DISPLAY, '[[DEMO_PHONE_DISPLAY]]'),
@@ -68,10 +70,10 @@ export const site = {
   plans,
   currency: 'USD',
   setupFee: { monthly: 297, annual: 0 },
-  annual: '[[ANNUAL_PRICE: 12 times monthly, setup fee waived]]',
-  contract: '[[CONTRACT: month to month]]',
-  rollover: '[[ROLLOVER: unused minutes reset on your billing date]]',
-  portfolioExtra: '[[PORTFOLIO_EXTRA]]',
+  annual: '12 times the monthly price',
+  contract: "Month to month, cancel with 30 days' notice",
+  rollover: 'they reset on your billing date',
+  portfolioExtra: 'Lowest per-minute overage rate',
   billing: {
     incrementSeconds: 1,
     minBillableSeconds: 10,
@@ -80,18 +82,19 @@ export const site = {
     example: { minutes: 2, seconds: 10, roundedUpTo: 3 },
   },
   coverage: { default: 'after hours', onRequest: '24/7' },
-  concurrentCalls: '[[CONCURRENT_CALLS: 20]]',
+  concurrentCalls: '20',
   textAlertApproval: '1 to 3 weeks', // US A2P 10DLC carrier registration
   timing: {
     integration: '[[INTEGRATION_TIMING: planned, with no date yet]]',
-    tourBooking: '[[TOUR_BOOKING_TIMING: planned, with no date yet]]',
+    tourBooking: 'planned, with no date yet',
   },
   /** Features that are not live. Copy behind a false flag never renders; scripts/check.ts enforces it. */
   flags: { sms: false, softwareIntegration: false, tourBooking: false, spanish: false, humanFallback: false, vendorDispatch: false, ownerReport: false },
   analytics: { gtmId: env(process.env.NEXT_PUBLIC_GTM_ID, '') }, // optional, empty disables GTM
   indexNowKey: '6f1d2c9a4b8e4f0e9d3a7c5b2e1f8a40',
-  /** Cross-link to the sister site (footer and pricing FAQ only) */
+  /** Cross-link to the sister site (footer and pricing FAQ only). live: false hides both until that page exists. */
   sister: {
+    live: false,
     url: 'https://aireceptionistforsmallbusiness.net/for/property-management/',
     anchor: 'AI receptionist for property management',
   },

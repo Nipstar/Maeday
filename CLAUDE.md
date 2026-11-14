@@ -6,7 +6,7 @@ Marketing site for **MaeDay** (propertymanagementafterhoursansweringservice.com)
 
 ## Where things live
 
-- `src/site.config.ts`: the single source for every price, minute figure, phone number, URL, flag and the legal and buyer sources (`site.sources`, each with `url` and `checked`). Deployment values come from `NEXT_PUBLIC_*` env vars at build time, falling back to `[[PLACEHOLDER]]`s; read each by its literal `process.env.NEXT_PUBLIC_X` name. **Never type a price, minute figure, phone number or URL into a page, component or content file.**
+- `src/site.config.ts`: the single source for every price, minute figure, phone number, URL, flag and the legal and buyer sources (`site.sources`, each with `url` and `checked`). Deployment values come from `NEXT_PUBLIC_*` env vars at build time, falling back to `[[PLACEHOLDER]]`s; read each by its literal `process.env.NEXT_PUBLIC_X` name. Locally they come from `.env` or `.env.local` (gitignored), read when `next dev` starts: restart the dev server after changing one. `address` and `phone` have no env var; set them in the config. **Never type a price, minute figure, phone number or URL into a page, component or content file.**
 - `src/content/competitors.ts`: competitor facts, each read on the vendor's own page, with `url` and `checked`.
 - `src/content/`: all copy. `home.ts`, `pricing.ts`, `faqs.ts`, `service.ts`, `segments.ts` (one object per segment page), `compare.ts` (compare pages and the hub), `guides.ts`, `about.ts`. Strings use tokens (`{starter.price}`, `{setupFee.monthly}`, `{c.smithai.tier1.price}`, `{texasRepairDays}`...) filled by `fill()` in `src/lib/format.ts`, and `{@key}` inline links from `src/lib/links.ts` (rendered by `<Rich>`; plain text until the target page exists).
 - `src/components/`: shared UI. Every "Book a setup call" is `<BookLink position>` (modal, UTMs, `click_book`). Every "Hear a sample call" is `<CallLink position>` (`tel:` from config, `click_call`). "Start Starter now" is `<StartLink plan="starter">`, pricing page only. `<CallLog>` is the signature log, always labelled as an invented example. `<AnswerBlock>` is the 40 to 60 word answer on every indexable page.
@@ -30,7 +30,7 @@ Marketing site for **MaeDay** (propertymanagementafterhoursansweringservice.com)
 - **Fair Housing:** leasing copy never mentions neighborhoods, schools or who lives somewhere, and says accommodation requests go to a person.
 - Example calls use invented names and 555 numbers and are labelled as examples.
 - Competitors: facts only from their own pages, dated and linked; never disparage; every compare page says when the other service is the better choice.
-- Placeholders are `[[UPPER_CASE]]` or `[[KEY: suggested wording]]` and stay visible until filled.
+- Placeholders are `[[UPPER_CASE]]` or `[[KEY: suggested wording]]` and stay visible until filled. Exception: `site.address` and `site.phone` are left out of the footer and About contact line while they are placeholders (filtered with `isPlaceholder()`), so the line shows only the email.
 - Every page in SPIN order: situation, problem, implication, need-payoff, then Mae. One H1. Question-style H2s; the first sentence under an H2 answers it. Every page shows "Last updated".
 
 ## Checks

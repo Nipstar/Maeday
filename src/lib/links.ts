@@ -14,7 +14,7 @@ const hasGuide = (slug: string) => guides.some((g) => g.slug === slug);
 
 /** `live: false` renders the text without a link until that page is built. */
 export const richLinks: Record<string, { href: string; text: string; external?: boolean; live: boolean }> = {
-  sister: { href: site.sister.url, text: site.sister.anchor, external: true, live: true },
+  sister: { href: site.sister.url, text: site.sister.anchor, external: true, live: site.sister.live },
   pricing: { href: routes.pricing, text: 'pricing', live: builtPages.pricing },
   service: { href: routes.service, text: 'how emergency answering works', live: builtPages.service },
   guide: {

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { site } from '@/site.config';
+import { isPlaceholder, site } from '@/site.config';
 import { about } from '@/content/about';
 import { fill } from '@/lib/format';
 import { pageMeta } from '@/lib/seo';
@@ -46,7 +46,7 @@ export default function AboutPage() {
             </div>
           ))}
           <p className="m-0 text-[15px] text-slate">
-            {site.name} is a service of {site.owner}. {site.address} · {site.phone} · {site.email}
+            {site.name} is a service of {site.owner}. {[site.address, site.phone].filter((v) => !isPlaceholder(v)).map((v) => `${v} · `)}{site.email}
           </p>
         </div>
       </section>
