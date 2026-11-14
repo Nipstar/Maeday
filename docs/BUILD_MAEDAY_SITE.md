@@ -8,7 +8,7 @@ Mae is the voice on the phone. She answers tenant, owner, prospect and vendor ca
 
 Copy this build pattern from `Nipstar/ai-receptionist` (read-only): Next.js static export, Tailwind v4, `src/site.config.ts` as the single source for prices, `NEXT_PUBLIC_*` env vars for deployment values, `scripts/check.ts` enforcing the copy rules, JSON-LD built from the same data as the visible FAQ, `llms.txt`, and `vercel.json` plus `public/_headers`. Copy the structure, not the copy and not the look.
 
-Repo: `Nipstar/maeday` (Andy creates it).
+Repo: `Nipstar/maeday` (https://github.com/Nipstar/maeday).
 
 ## Source-of-truth files (put these in the repo before Phase 0)
 
