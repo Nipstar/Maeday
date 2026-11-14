@@ -4,10 +4,10 @@ import type { Card, CallLogData } from './types';
 export const home = {
   title: 'Property Management Answering Service | MaeDay',
   metaDescription:
-    'After-hours answering for property managers. Emergencies reach your on-call tech, with retries and backups. From {starter.price} a month for {starter.minutes} minutes.',
+    'Property management answering service for after-hours calls. Emergencies reach your on-call tech, with retries and a backup. From {starter.price}/month.',
   hero: {
-    eyebrow: 'Property management answering service',
-    h1: 'After-hours answering that reaches your on-call tech.',
+    eyebrow: 'After-hours coverage for property managers',
+    h1: 'Property management answering service that reaches your on-call tech.',
     sub: 'Mae answers your tenant, owner and prospect calls when the office is closed. Real emergencies go to your on-call tech by your rules, with retries and a backup. Everything else is logged for the morning. From {starter.price} a month.',
     chips: ['After hours · {onRequest}', 'Billed by the second', 'Works alongside any property software'],
   },

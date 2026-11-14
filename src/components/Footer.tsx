@@ -19,7 +19,7 @@ export function Footer() {
             </p>
             <p className="mt-2 mb-0 text-fog">{site.descriptor}.</p>
             <p className="mt-4 mb-0 text-sm text-mist">
-              {site.name} is a service of {site.owner}.{' '}
+              {site.name} is a service of {site.owner}. Serving US property managers.{' '}
               {[site.address, site.phone].filter((v) => !isPlaceholder(v)).map((v) => `${v} · `)}
               {isPlaceholder(email) ? <span>{email}</span> : <a href={`mailto:${email}`} className={link}>{email}</a>}
             </p>
