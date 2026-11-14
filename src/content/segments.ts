@@ -260,6 +260,237 @@ export const segments: Segment[] = [
     ctaHeading: 'Bring your association list. We will set up each one.',
     related: ['apartments', 'single-family-rentals'],
   },
+  {
+    slug: 'single-family-rentals',
+    name: 'Single-family rentals',
+    cardLine: 'Scattered sites, owners who call, travel time to the property.',
+    title: 'Single-Family Rental Answering Service | MaeDay',
+    metaDescription:
+      'After-hours answering for single-family rentals: tenants reach your on-call tech by your rules, owners get routed, and every call is logged by address.',
+    eyebrow: 'Single-family rentals',
+    h1: 'After-hours answering for single-family rentals',
+    intro:
+      'Your homes are spread across town, your tech is in one place at a time, and some owners call as often as tenants do. Mae answers after hours, works out which home the caller means, sends real emergencies to the right on-call tech for that address, and routes owners to whoever handles them.',
+    primary: 'single family rental answering service',
+    secondaries: ['after hours answering for rental homes', 'scattered site property management answering service'],
+    audience: 'Single-family rental property managers',
+    answerHeading: 'What does an answering service do for single-family rentals?',
+    answer:
+      'It answers your line after hours for every home in the portfolio. Mae takes the address, checks the problem against your emergency list for that home, and calls the on-call tech who covers it, then the backup. Owners are recognized and routed, routine repairs are logged for the morning, and each call is summarized by email.',
+    callLog: {
+      label: 'Tuesday night',
+      company: 'Summit Rentals, 85 homes',
+      note: 'Example calls. Names and numbers are invented.',
+      lines: [
+        { time: '10:18 PM', caller: 'Carla Nguyen · 555-0152 · 4410 Birch Rd', quote: 'The water heater is leaking all over the garage.', tag: 'emergency' },
+        { time: '10:19 PM', text: 'Calling Mike Torres, on-call for the north side', status: 'answered, connected' },
+        { time: '10:41 PM', caller: 'Robert Hale · 555-0108 · owner, 4410 Birch Rd', quote: 'My tenant texted me about a leak. Is someone going out?', tag: 'owner' },
+        { time: '10:43 PM', text: 'Message to owner relations, with the open emergency noted' },
+      ],
+    },
+    problemsHeading: 'Why are single-family calls harder after hours?',
+    problems: [
+      {
+        title: 'Every home is somewhere else',
+        text: 'There is no super on site. The nearest tech may be across town, so the call needs to reach them before the problem grows.',
+      },
+      {
+        title: 'Tenants are not sure who to call',
+        text: 'Some call you, some call the owner, some call a plumber off the internet. The call that matters may never reach your team.',
+      },
+      {
+        title: 'Owners call too',
+        text: 'Owners hear about a problem from their tenant and call you at night to ask what is happening. Without an answer, they call again in the morning, unhappy.',
+      },
+    ],
+    implicationsHeading: 'What does a slow response cost in a rental home?',
+    implications: [
+      {
+        title: 'Damage nobody sees',
+        text: 'A water heater leaking in a garage or a pipe in a crawl space can run for hours before anyone notices. The repair grows with every one.',
+      },
+      {
+        title: 'Travel time adds up',
+        text: 'With scattered homes, the drive is part of every repair. A call that reaches the tech at 8am instead of 10pm starts that drive ten hours late.',
+      },
+      {
+        title: 'Owner trust',
+        text: 'An owner who hears about a leak from their tenant before they hear from you starts to wonder what else they are not told. A timestamped log answers that.',
+      },
+    ],
+    needPayoffHeading: 'What changes when every home has a plan?',
+    needPayoffIntro: 'The tech who covers that address hears about the leak tonight, and the owner gets a straight answer.',
+    needPayoff: [
+      { title: 'The right tech for the address', text: 'Mae picks the on-call ladder by home or by area, so the call goes to whoever is closest by your rules.' },
+      { title: 'Owners routed, not ignored', text: 'Owners are recognized by name and number and passed to whoever handles owner relations, as a message or a transfer.' },
+      { title: 'A record for every home', text: 'Every call and attempt is logged with the address, ready when the owner asks.' },
+    ],
+    callsHeading: 'What do single-family calls look like after hours?',
+    calls: [
+      { title: 'Water heaters and leaks', text: 'Leaking tanks, burst supply lines, water in the garage or basement. These go to your on-call ladder.', tag: 'Emergency', tagKind: 'emergency' },
+      { title: 'Heating and cooling', text: 'No heat in a cold snap or no AC in a heat wave. Your list sets the line for each.', tag: 'Your list', tagKind: 'neutral' },
+      { title: 'Lockouts', text: 'Handled by your policy, every time: on-call, a locksmith list, or the morning.', tag: 'Your policy', tagKind: 'neutral' },
+      { title: 'Owner calls', text: 'Recognized and routed to owner relations, with any open emergency on that home noted.', tag: 'Owners', tagKind: 'neutral' },
+      { title: 'Outside the home', text: 'A fallen fence, a broken garage door, a sprinkler running into the street. Logged or escalated by your rules.', tag: 'Your list', tagKind: 'neutral' },
+      { title: 'Routine repairs', text: 'Appliances, slow drains, a stuck window. Details and address logged for your team in the morning.', tag: 'Logged for morning', tagKind: 'morning' },
+    ],
+    specifics: [
+      {
+        heading: 'Who is the right tech for this address?',
+        intro: 'Each home, or each group of homes, gets its own on-call ladder. Mae asks for the address, finds the home, and calls the people you set for it.',
+        items: [
+          'Group homes by area so the on-call tech is the one who covers that part of town.',
+          'Give each owner\'s homes their own rules if an owner wants something different.',
+          'Name owners so their calls are recognized and routed, not treated as tenant calls.',
+          'Keep one after-hours number for the whole portfolio. Mae asks which home the call is about.',
+        ],
+        examples: [
+          { name: 'North side homes', text: 'On-call: Mike, then Dana. Lockouts: locksmith list.' },
+          { name: 'Lake County homes', text: 'On-call: Dana, then the manager. No hot water waits until 8am.' },
+        ],
+        note: 'Example areas. Names are invented.',
+      },
+    ],
+    faqHeading: 'Single-family manager questions',
+    faqs: [
+      {
+        q: 'Do I need a separate number for each home?',
+        a: 'No. One after-hours number covers the whole portfolio. Mae asks for the address and follows the rules you set for that home or area.',
+      },
+      {
+        q: 'Can owners reach someone after hours?',
+        a: 'Owner calls are recognized and routed to whoever handles owner relations, as a message or a transfer, by your rules.',
+      },
+      {
+        q: 'What if the tenant cannot give the address?',
+        a: 'Mae asks for the name on the lease or the phone number on file and logs what she has. If the problem is on your emergency list, she escalates it with whatever the caller can tell her.',
+      },
+      {
+        q: 'Which plan fits a portfolio of about 85 homes?',
+        a: 'Starter, at {starter.price} for {starter.minutes} minutes, covers about {starter.calls} calls of {typicalCallMinutes} minutes. We check your real call volume on the setup call and suggest a plan.',
+      },
+    ],
+    ctaHeading: 'Bring your map of homes. We will build the ladders.',
+    related: ['apartments', 'hoa'],
+  },
+  {
+    slug: 'student-housing',
+    name: 'Student housing',
+    cardLine: 'Lockouts, parents calling, move-in week.',
+    title: 'Student Housing Answering Service | MaeDay',
+    metaDescription:
+      "After-hours answering for student housing: lockouts handled by your policy, emergencies sent to your on-call staff, and parent calls logged for your team.",
+    eyebrow: 'Student housing',
+    h1: 'Student housing answering service for nights and weekends',
+    intro:
+      'Student housing calls come late, come in waves at move-in and move-out, and often come from parents. Mae answers in your community\'s name, handles lockouts the way your policy says, sends real emergencies to your on-call staff, and logs everything else with the room number.',
+    primary: 'student housing answering service',
+    secondaries: ['student housing after hours answering', 'off campus housing answering service'],
+    audience: 'Student housing property managers',
+    answerHeading: 'What does a student housing answering service do?',
+    answer:
+      "It answers the community's line when the leasing office is closed. Lockouts follow your policy, maintenance emergencies go to your on-call staff with retries and a backup, and parents' calls are logged for your team without sharing resident details. Every call is summarized by email with the building and room number.",
+    callLog: {
+      label: 'Move-in weekend',
+      company: 'Campus View, 400 beds',
+      note: 'Example calls. Names and numbers are invented.',
+      lines: [
+        { time: '11:40 PM', caller: 'Diane Lee · 555-0163 · parent', quote: "My son says the AC in his room isn't working.", tag: 'morning' },
+        { time: '11:42 PM', text: 'Logged for maintenance with the room number · parent told when to expect an update' },
+        { time: '1:12 AM', caller: 'Jordan Lee · 555-0185 · Building B, room 312', quote: "I locked myself out and my roommate's away.", tag: 'policy' },
+        { time: '1:13 AM', text: 'Calling the on-call community assistant, per your lockout policy', status: 'answered, connected' },
+      ],
+    },
+    problemsHeading: 'What makes student housing calls different?',
+    problems: [
+      {
+        title: 'Lockouts at all hours',
+        text: 'Keys get lost, and lockouts tend to happen late. Every one is urgent to the student standing in the hallway.',
+      },
+      {
+        title: 'Parents on the phone',
+        text: 'A parent who hears about a problem calls the community, often more than once, and often at night in their own time zone.',
+      },
+      {
+        title: 'Residents new to renting',
+        text: 'Many residents have never reported a repair. They may not know that a slow leak under the sink matters tonight, or that a broken blind can wait.',
+      },
+    ],
+    implicationsHeading: 'What does that cost the community?',
+    implications: [
+      {
+        title: 'Staff on call all night',
+        text: 'If every lockout and question reaches your on-call staff, they are up for calls that a clear policy could have handled, and slower for the real emergency.',
+      },
+      {
+        title: 'Parents who cannot get an answer',
+        text: 'A parent who reaches voicemail at night calls back angrier, and sometimes calls someone above you.',
+      },
+      {
+        title: 'Small problems that grow',
+        text: 'A first-time renter who does not report a leak until it reaches the floor below turns a quick fix into a bigger repair.',
+      },
+    ],
+    needPayoffHeading: 'What changes when the night line has a plan?',
+    needPayoffIntro: 'Lockouts follow one policy, parents get an answer, and your on-call staff are woken only for the calls on your list.',
+    needPayoff: [
+      { title: 'Lockouts handled the same way', text: 'On-call staff, a fee message, a locksmith list or the morning. You choose once and Mae follows it.' },
+      { title: 'Parents get an answer', text: 'Mae takes the message, tells them when your team will follow up, and does not share resident details.' },
+      { title: 'Move-in week covered', text: 'Mae answers several calls at once, so a busy weekend does not mean a full voicemail box.' },
+    ],
+    callsHeading: 'What do student housing calls look like after hours?',
+    calls: [
+      { title: 'Lockouts', text: 'Handled by your policy, logged with the room number and the time.', tag: 'Your policy', tagKind: 'neutral' },
+      { title: 'Maintenance emergencies', text: 'Leaks, no heat, no water, a door that will not lock. These go to your on-call ladder.', tag: 'Emergency', tagKind: 'emergency' },
+      { title: 'Parents', text: 'Messages logged for your team with the student\'s building and room, without confirming resident details to the caller.', tag: 'Logged', tagKind: 'morning' },
+      { title: 'Move-in and move-out', text: 'Key pickup, parking, check-out times and deposit questions, answered from your script.', tag: 'Your script', tagKind: 'neutral' },
+      { title: 'Roommates and noise', text: 'Logged for your community team. If someone feels unsafe, Mae tells them to call 911.', tag: 'Logged for morning', tagKind: 'morning' },
+      { title: 'Prospective residents', text: 'Questions about availability, rates and how to apply, from your approved script, with details sent to leasing.', tag: 'Leasing', tagKind: 'neutral' },
+    ],
+    specifics: [
+      {
+        heading: 'How does Mae handle parents and privacy?',
+        intro: 'Parents call about their student, but your rules decide what anyone is told. Mae takes the message and passes it on. She does not confirm who lives where.',
+        items: [
+          'Mae does not confirm whether a student lives in the community or share their details.',
+          'She takes the parent\'s name, number and message, and logs it with whatever room details the parent gives.',
+          'If the parent reports something on your emergency list, she escalates it like any other emergency.',
+          'Your team follows up in the morning, by your policy.',
+        ],
+        note: 'Check your own privacy and parent-contact policy before setup.',
+      },
+      {
+        heading: 'What about move-in week?',
+        intro: 'Calls come in waves at move-in and move-out. Mae answers up to {concurrentCalls} calls at once, so the line does not go to voicemail on the busiest night of the year.',
+        items: [
+          'Your move-in script: key pickup, parking, what to bring, check-in times.',
+          'Your move-out script: check-out times, key return, deposit questions to the office.',
+          'Lockout policy for the first weeks, when keys get lost most.',
+        ],
+      },
+    ],
+    faqHeading: 'Student housing manager questions',
+    faqs: [
+      {
+        q: 'How does Mae handle lockouts?',
+        a: 'Exactly as your policy says: call the on-call staff member, read your lockout fee message, give a locksmith list, or ask the resident to come to the office in the morning.',
+      },
+      {
+        q: 'Will Mae tell a parent anything about their student?',
+        a: 'No. She takes the message and passes it to your team. She does not confirm whether a student lives there or share their details.',
+      },
+      {
+        q: 'Can Mae handle move-in weekend?',
+        a: 'Mae answers up to {concurrentCalls} calls at once, from your move-in script, and sends anything urgent to your on-call ladder.',
+      },
+      {
+        q: 'Do residents know they are talking to an AI?',
+        a: 'Mae introduces herself by name and says she is an AI voice agent if asked.',
+      },
+    ],
+    ctaHeading: 'Bring your lockout policy. We will set up the rest.',
+    related: ['apartments', 'single-family-rentals'],
+  },
 ];
 
 export function getSegment(slug: string): Segment | undefined {

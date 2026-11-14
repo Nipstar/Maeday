@@ -160,6 +160,18 @@ Left out (could not verify on the vendor's own page): AnswerConnect prices (pric
 
 Checks: build and check pass on 15 pages (the AnswerBlock length check caught a 61-word answer, fixed).
 
+## Phase 5: Guides and remaining pages (14 November 2026)
+
+Built:
+- `/guides/what-counts-as-a-maintenance-emergency/`: manager-facing guide by Andy Norman with byline, published and updated dates, AnswerBlock, "Why does the definition matter?" (BiggerPockets quotes, linked and dated), a 15-row template emergency list as a printable table with Copy and Print buttons (`copy_list` event; print stylesheet hides header, footer and the sticky bar), state repair timelines for Texas (Attorney General) and California (DRE) marked "General information, not legal advice", one contextual link up to `/emergency-maintenance-answering/`, quick answers on no hot water, AC, a clogged toilet and lockouts (FAQPage), and a Sources list. JSON-LD: Article (author Andy Norman, citations), FAQPage, BreadcrumbList.
+- `/single-family-rentals/`: scattered homes, owners who call, travel time, per-area ladders, one number for the portfolio.
+- `/student-housing/`: lockouts by policy, parents and privacy (Mae does not confirm who lives there), move-in and move-out waves, first-time renters.
+- The guide link in the home FAQ and the service page now renders as a link (it was plain text until the page existed).
+
+Not built (per the run instructions; listed under Next pages): the three remaining compare pages and the on-call guide.
+
+Checks: build and check pass on 18 pages. No horizontal scroll at 375 px.
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.
@@ -170,6 +182,8 @@ Checks: build and check pass on 15 pages (the AnswerBlock length check caught a 
 - HOA copy is new (no canvas board). The HOA example association "Pine Ridge Townhomes" puts "the community's own tech" first on the ladder, not an outside vendor, because vendor dispatch is behind a false flag.
 - Apartments FAQ "Which plan fits a 120-unit community?" no longer says "Most single communities start on Starter" (no data behind it); it gives the Starter numbers and offers to size it on the call.
 - About says Mae runs on Retell with Twilio. Remove if you prefer not to name suppliers.
+- Phase 5: the template emergency list on the guide (15 rows, with "Your call" for lockouts, no hot water and AC). It is generic guidance; check it matches how you would set up a client.
+- Student housing parent-privacy wording ("Mae does not confirm whether a student lives in the community") is a product rule I wrote. Confirm the agent will behave that way.
 - Phase 4: the hub's "Not stated on their page" cells. They are accurate but make the table look one-sided; the alternative is to drop those columns for vendors whose pages say nothing.
 - The canvas compare table said Ruby bills "Minute, rounded up". Ruby's page does not state rounding, so the table says "The minute".
 
@@ -177,4 +191,12 @@ Checks: build and check pass on 15 pages (the AnswerBlock length check caught a 
 
 ## Next pages
 
-(Filled in Phase 5.)
+Not built in v1. Each needs its sources re-fetched on the day it is written.
+
+| Route | Template | Notes |
+|---|---|---|
+| `/compare/property-meld-max-on-call/` | Compare | Property Meld page checked 14 Nov 2026: MAX On-Call $1.50/unit add-on on Ops $2.00/unit, $200/month minimum. Better choice if you run Property Meld and only need maintenance answered. |
+| `/compare/buildium-maintenance-contact-center/` | Compare | Buildium page checked 14 Nov 2026: $0.70 or $1.10 per unit, $140 minimum, $300 setup, human agents 24/7, maintenance only. Better choice if you run Buildium and only need maintenance answered. |
+| `/compare/ai-answering-vs-call-center/` | Compare (category) | Owns "property management call center" (300, KD 5). Needs a source for call center pricing beyond the vendor pages already checked. |
+| `/guides/on-call-rotation-and-escalation/` | Guide | No measurable keyword. Draw on Andy's field service experience; no statistics without a source. |
+| `/commercial/` | Segment | Listed as "later" on the canvas. |
