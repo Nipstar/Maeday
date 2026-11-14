@@ -15,7 +15,10 @@
     "icons": "node scripts/make-icons.mjs",
     "preview": "npx serve out",
     "indexnow": "tsx scripts/indexnow.ts",
-    "schema": "tsx scripts/schema-validate.ts"
+    "schema": "tsx scripts/schema-validate.ts",
+    "test": "playwright test --trace off",
+    "check:selftest": "tsx scripts/check-selftest.ts",
+    "lighthouse": "node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "next": "^16.4.6",
@@ -43,5 +46,8 @@
   },
   "engines": {
     "node": ">=20.9"
+  },
+  "overrides": {
+    "playwright-core": "1.63.0"
   }
 }

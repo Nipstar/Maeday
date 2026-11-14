@@ -29,7 +29,7 @@ import { validateBlock } from './schema-validate';
 
 const SOURCE_ONLY = process.argv.includes('--source');
 const ALLOW_PLACEHOLDERS = process.env.ALLOW_PLACEHOLDERS === '1';
-const OUT = 'out';
+const OUT = process.env.CHECK_OUT || 'out';
 /** [[KEY]] or [[KEY: suggested text]]. Upper-case key, so Next's inline [["..."]] data never matches. */
 const PLACEHOLDER = /\[\[[A-Z][A-Z0-9_]*(?::[^\]]*)?\]\]/g;
 
@@ -279,7 +279,7 @@ if (!SOURCE_ONLY) {
   for (const abs of pages) {
     const file = relative('.', abs);
     const html = readFileSync(abs, 'utf8');
-    const route = file.replace(/^out\//, '/').replace(/index\.html$/, '');
+    const route = ('/' + relative(OUT, abs)).replace(/\\/g, '/').replace(/index\.html$/, '');
     const isCompare = route.startsWith('/compare/') || route.startsWith('/best-');
     for (const m of html.matchAll(PLACEHOLDER)) {
       const key = m[0].split(':')[0].replace(/\]\]$/, '') + ']]';

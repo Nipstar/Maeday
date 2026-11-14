@@ -179,7 +179,7 @@ Built:
 - `scripts/schema-validate.ts` (`npm run schema`): parses every block and checks the properties Google's structured-data docs require per type. Wired into `check.ts`.
 - `public/llms.txt` and `llms-full.txt` generated at prebuild from content: fixed description, plans and billing from config, what Mae won't do, every page with its AnswerBlock as the summary, contact; the full file adds every page's copy, competitor facts with URLs and check dates, and sources. `check.ts` now runs the copy rules on both files.
 - `robots.txt` allows `*` plus GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended and Bingbot, with a `Sitemap:` line.
-- `sitemap.xml`: 13 indexable pages with `lastmod` from `site.lastUpdatedIso` (thank-you, privacy and terms left out).
+- `sitemap.xml`: 12 indexable pages with `lastmod` from `site.lastUpdatedIso` (thank-you, privacy and terms left out).
 - OG images per page (`opengraph-image.tsx`, 1200 x 630, Midnight, lit-window mark, page title, "From $197/mo" from config) for home, pricing, service, every segment, every compare page, hub, guide and about.
 - IndexNow: key file `public/<key>.txt` and `npm run indexnow` (post-deploy ping of every indexable URL).
 
@@ -198,6 +198,37 @@ JSON-LD validation (`npm run schema`, 14 Nov 2026): 18 of 18 HTML files pass.
 
 Google's Rich Results Test and validator.schema.org could not be reached from the build container; run the live URLs through both after deploy (see `docs/DEPLOY.md`).
 
+## Phase 7: Checks and CI (14 November 2026)
+
+Built:
+- `scripts/check.ts` complete: all nine rules from the brief plus the extras listed in Phase 1, JSON-LD validation, and the copy rules on `llms.txt` / `llms-full.txt`. `CHECK_OUT` points it at another directory.
+- `scripts/check-selftest.ts` (`npm run check:selftest`): copies `out/`, breaks one rule at a time and expects a failure. 23 of 23 cases caught: placeholder, em dash, `!`, banned word, UK spelling, Ltd, bare "24/7", price not in config, minute figure not in config, other `tel:` number, non-555 phone number, broken JSON-LD, FAQ mismatch, Review schema, short AnswerBlock, compare page without "better choice if", Spanish claim, integration name, text alerts claim, broken link, two H1s, missing canonical, call log without its "invented" label.
+- Playwright (`tests/site.spec.ts`, `npm test`) at 375 px and 1280 px on all 15 HTML pages: no horizontal scroll, axe (WCAG 2.1 A and AA) zero violations, `tel:` only to the demo line, FAQ JSON-LD equals the visible FAQ text, sticky CTA hidden until the hero leaves view (mobile) and never shown on desktop, booking modal iframe and `form_embed.js` absent until the first click and then present with `utm_*` and `source_page`, "Start Starter now" carries `utm_source`, `gclid` and `source_page`, one H1 and "Last updated" on every indexable page. Result: 128 passed, 2 skipped (the mobile-only and desktop-only sticky tests skip on the other viewport).
+- axe found one issue, fixed: links inside running text were told apart by color only (`link-in-text-block`). Links are now underlined by default; buttons and nav opt out.
+- `@axe-core/playwright` pulled a newer `playwright-core` than `@playwright/test` 1.63; pinned with `overrides` so types and the preinstalled browser match.
+- Lighthouse: `scripts/lighthouse.mjs` (`npm run lighthouse`), mobile, every sitemap page, fails under 95.
+- GitHub Actions `.github/workflows/ci.yml` on pull requests and pushes to main: build with the test env, check, self-test, schema, Playwright + axe, Lighthouse (reports kept as an artifact).
+- README.md and CLAUDE.md written as the brief describes.
+
+Lighthouse mobile, 14 Nov 2026 (local static server, simulated throttling):
+
+| Page | Perf | A11y | Best practices | SEO | LCP (simulated) | CLS |
+|---|---|---|---|---|---|---|
+| `/` | 97 | 100 | 100 | 100 | 2.3 s | 0.046 |
+| `/pricing/` | 97 | 100 | 100 | 100 | 2.5 s | 0 |
+| `/emergency-maintenance-answering/` | 96 | 100 | 100 | 100 | 2.7 s | 0 |
+| `/apartments/` | 95 | 100 | 100 | 100 | 2.9 s | 0 |
+| `/hoa/` | 96 | 100 | 100 | 100 | 2.8 s | 0.018 |
+| `/single-family-rentals/` | 96 | 100 | 100 | 100 | 2.5 s | 0 |
+| `/student-housing/` | 95 | 100 | 100 | 100 | 2.9 s | 0 |
+| `/best-property-management-answering-service/` | 96 | 100 | 100 | 100 | 2.7 s | 0.001 |
+| `/compare/smith-ai/` | 96 | 100 | 100 | 100 | 2.7 s | 0 |
+| `/compare/specialty-answering-service/` | 96 | 100 | 100 | 100 | 2.7 s | 0.004 |
+| `/guides/what-counts-as-a-maintenance-emergency/` | 95 | 100 | 100 | 100 | 2.8 s | 0.005 |
+| `/about/` | 97 | 100 | 100 | 100 | 2.6 s | 0.008 |
+
+All pages meet 95+ in every category and CLS 0.05 or less. Not met: the brief's LCP target of 1.8 s. The simulated LCP (2.3 to 2.9 s) tracks the Next.js runtime scripts (about 150 KB compressed), not the content: observed LCP in the same traces is about 0.2 s, and preloading or `font-display: optional` did not change it. Performance scores varied by up to 4 points between runs. Re-run on the live Cloudflare URL (HTTP/2, Brotli, edge cache) after deploy.
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.
@@ -208,6 +239,7 @@ Google's Rich Results Test and validator.schema.org could not be reached from th
 - HOA copy is new (no canvas board). The HOA example association "Pine Ridge Townhomes" puts "the community's own tech" first on the ladder, not an outside vendor, because vendor dispatch is behind a false flag.
 - Apartments FAQ "Which plan fits a 120-unit community?" no longer says "Most single communities start on Starter" (no data behind it); it gives the Starter numbers and offers to size it on the call.
 - About says Mae runs on Retell with Twilio. Remove if you prefer not to name suppliers.
+- Phase 7: LCP target (1.8 s simulated) is not met; scores are 95 to 97. Options if it matters on the live site: drop the client-side router (plain `<a>` links), or move the small interactive pieces (booking modal, sticky bar, copy buttons) to one inline script.
 - Phase 5: the template emergency list on the guide (15 rows, with "Your call" for lockouts, no hot water and AC). It is generic guidance; check it matches how you would set up a client.
 - Student housing parent-privacy wording ("Mae does not confirm whether a student lives in the community") is a product rule I wrote. Confirm the agent will behave that way.
 - Phase 4: the hub's "Not stated on their page" cells. They are accurate but make the table look one-sided; the alternative is to drop those columns for vendors whose pages say nothing.

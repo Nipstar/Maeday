@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Build, check, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Fictional test values (555 numbers, example.com URLs). Placeholders that live in code
+      # (address, legal text, policy wording) stay, so preview builds allow them.
+      ALLOW_PLACEHOLDERS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Use the test environment
+        run: cp .env.example .env.local
+      - name: Build (prebuild and postbuild run the copy and site checks)
+        run: npm run build
+      - name: Check, lint, typecheck
+        run: npm run check
+      - name: Check self-test (every rule fails when broken)
+        run: npx tsx scripts/check-selftest.ts
+      - name: JSON-LD
+        run: npm run schema
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Playwright and axe at 375 px and 1280 px
+        run: npx playwright test --trace off
+      - name: Lighthouse mobile, every sitemap page (fails under 95)
+        run: CHROME_PATH="$(which google-chrome || which chromium)" node scripts/lighthouse.mjs
+      - name: Keep Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse
+          path: .lighthouse/
+          if-no-files-found: ignore
