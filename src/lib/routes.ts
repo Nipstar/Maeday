@@ -20,7 +20,7 @@ export const routes = {
 export const builtPages = {
   pricing: true,
   service: true,
-  hub: false,
+  hub: true,
   about: true,
   legal: true,
 };

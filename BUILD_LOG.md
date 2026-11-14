@@ -146,6 +146,20 @@ Built:
 
 Checks: build and check pass on 12 pages. No horizontal scroll at 375 px on any Phase 3 page.
 
+## Phase 4: Compare pages (14 November 2026)
+
+Re-fetched before writing (14 Nov 2026, same day as Phase 0): smith.ai/ai-receptionist, Smith.ai's comparison page and Specialty Answering Service's property management page. No change from the Phase 0 reading. `competitors.ts` already held the verified figures.
+
+Built:
+- Compare template `src/app/compare/[slug]/page.tsx` from `src/content/compare.ts`: H1, dated short answer (AnswerBlock, 40 to 60 words), side-by-side table (every competitor fact from `competitors.ts`, vendor name linked, check date and source links under it), "[Name] is the better choice if" and "MaeDay is the better choice if" (both required by the check), worked cost example for 150 calls from config, FAQ, CTA. JSON-LD: WebPage, FAQPage, BreadcrumbList. No Review or AggregateRating.
+- `/compare/smith-ai/`: canvas copy, updated to today's Smith.ai page (live agent is a per-call add-on, Spanish included, Pro is self-setup, $2.00/call on Pro). The canvas's per-call total for 150 calls on Smith.ai is not shown: Smith.ai offers a 150-call Pro bundle at a discount without stating its price, so the page points to Smith.ai for that figure.
+- `/compare/specialty-answering-service/`: human operators, from $44 a month, Spanish-speaking staff, dispatch by phone, text, pager or email, two-week free trial. No per-minute rate is published, so no like-for-like cost is computed.
+- Hub `/best-property-management-answering-service/`: disclosure at the top that MaeDay is ours, the seven criteria, one table scoring MaeDay, Smith.ai AI, Specialty, Ruby, MAP, PATLive, Buildium and Property Meld on billing unit, emergency ladder, per-property rules, leasing calls, owner calls, software required and published price. Anything a vendor page does not state reads "Not stated on their page".
+
+Left out (could not verify on the vendor's own page): AnswerConnect prices (pricing page 404), Dialbox (blocked), Ruby's billing increment and contract terms, Smith.ai's 30-day money-back on the AI plan (only on the human receptionist page), Smith.ai's price for its 150-call Pro bundle.
+
+Checks: build and check pass on 15 pages (the AnswerBlock length check caught a 61-word answer, fixed).
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.
@@ -156,6 +170,7 @@ Checks: build and check pass on 12 pages. No horizontal scroll at 375 px on any 
 - HOA copy is new (no canvas board). The HOA example association "Pine Ridge Townhomes" puts "the community's own tech" first on the ladder, not an outside vendor, because vendor dispatch is behind a false flag.
 - Apartments FAQ "Which plan fits a 120-unit community?" no longer says "Most single communities start on Starter" (no data behind it); it gives the Starter numbers and offers to size it on the call.
 - About says Mae runs on Retell with Twilio. Remove if you prefer not to name suppliers.
+- Phase 4: the hub's "Not stated on their page" cells. They are accurate but make the table look one-sided; the alternative is to drop those columns for vendors whose pages say nothing.
 - The canvas compare table said Ruby bills "Minute, rounded up". Ruby's page does not state rounding, so the table says "The minute".
 
 - Phase 0: the corrected Property Meld price ($1.50/unit add-on plus Ops), the changed Smith.ai AI terms (per-call live agent add-on, Spanish included, no money-back on the AI page), and the sources left out (NYC heat rules, both Trustpilot complaints, AnswerConnect).
