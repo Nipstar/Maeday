@@ -229,6 +229,31 @@ Lighthouse mobile, 14 Nov 2026 (local static server, simulated throttling):
 
 All pages meet 95+ in every category and CLS 0.05 or less. Not met: the brief's LCP target of 1.8 s. The simulated LCP (2.3 to 2.9 s) tracks the Next.js runtime scripts (about 150 KB compressed), not the content: observed LCP in the same traces is about 0.2 s, and preloading or `font-display: optional` did not change it. Performance scores varied by up to 4 points between runs. Re-run on the live Cloudflare URL (HTTP/2, Brotli, edge cache) after deploy.
 
+## Phase 8: Deploy (not run)
+
+Per the run instructions, nothing was deployed. `docs/DEPLOY.md` has the exact Cloudflare Pages steps (project settings, build command and output, `NODE_VERSION=22`), environment variables per environment (`ALLOW_PLACEHOLDERS=1` on Preview only, `NEXT_PUBLIC_SITE_URL` on Preview only), the apex and `www` setup, the `callmaeday.com` and `getmaeday.com` 301 redirect rule (single redirect per zone, or Bulk Redirects), crawler access (Bot Fight Mode, AI crawl blocking, managed robots.txt) with a per-user-agent curl loop, and the live checks: headers, `llms.txt` as `text/plain`, OG images as PNG, 404 status, redirects, sitemap count, Lighthouse on the live URL, Rich Results Test, booking modal, demo line, Starter test order, IndexNow ping, Search Console and Bing. Tag `v1.0.0` after they pass.
+
+## Open placeholders (build of 14 Nov 2026, no env values set)
+
+| Placeholder | Where it shows | Set by |
+|---|---|---|
+| `[[BOOKING_URL]]` | Every page (header, hero, sticky bar, final CTA), llms files | `NEXT_PUBLIC_BOOKING_URL` |
+| `[[DEMO_PHONE_E164]]` | Every page (`tel:` links) | `NEXT_PUBLIC_DEMO_PHONE_E164` |
+| `[[DEMO_PHONE_DISPLAY]]` | Home hero (desktop), llms files | `NEXT_PUBLIC_DEMO_PHONE_DISPLAY` |
+| `[[EMAIL]]` | Every page (footer), about, thank-you, legal, Organization JSON-LD, llms files | `NEXT_PUBLIC_EMAIL` |
+| `[[ORDER_FORM_URL]]` | `/pricing/` | `NEXT_PUBLIC_ORDER_FORM_URL` |
+| `[[GO_LIVE]]` | `/` FAQ, `/compare/specialty-answering-service/`, `/thank-you/`, llms-full | `NEXT_PUBLIC_GO_LIVE` |
+| `[[ADDRESS]]`, `[[PHONE]]` | Every page (footer), about | `site.address`, `site.phone` |
+| `[[ANNUAL_PRICE]]` | `/pricing/` plan note and FAQ | `site.annual` |
+| `[[CONTRACT]]` | `/pricing/` FAQ, `/compare/smith-ai/` table | `site.contract` |
+| `[[ROLLOVER]]` | `/pricing/` minute list and FAQ | `site.rollover` |
+| `[[PORTFOLIO_EXTRA]]` | `/pricing/` Portfolio card | `site.portfolioExtra` |
+| `[[CONCURRENT_CALLS]]` | `/apartments/` and `/student-housing/` FAQs and section | `site.concurrentCalls` |
+| `[[INTEGRATION_TIMING]]` | `/` FAQ | `site.timing.integration` |
+| `[[TOUR_BOOKING_TIMING]]` | `/apartments/` FAQ | `site.timing.tourBooking` |
+| `[[PRIVACY_SUMMARY]]`, `[[PRIVACY_TEXT]]` | `/privacy/` (noindex) | `src/app/privacy/page.tsx` |
+| `[[TERMS_SUMMARY]]`, `[[TERMS_TEXT]]` | `/terms/` (noindex) | `src/app/terms/page.tsx` |
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.
