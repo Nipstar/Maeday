@@ -125,7 +125,25 @@ Checks: `ALLOW_PLACEHOLDERS=1 npm run build` and `ALLOW_PLACEHOLDERS=1 npm run c
 
 Lighthouse mobile, placeholder home (local static server, simulated throttling): Performance 96, Accessibility 100, Best practices 100, SEO 100, CLS 0, LCP 2.6 s (target 1.8 s, revisited in Phase 7).
 
+## Phase 2: Home and pricing (14 November 2026)
+
+Built:
+- Shared components: `CallLog` (data-driven, always labelled "Example call. Names and numbers are invented."), `AnswerBlock`, `SectionHead`, `CardGrid` (with linked, dated sources under a card), `Steps`, `LimitsList`, `PlanCard`, `PlanSection`, `CompareTable` (from `competitors.ts`, every name linked, check date per row), `Faq` (native `<details>`), `ForwardBox` (prefilled `mailto:` + copy button, `forward_email` / `forward_copy` events), `FinalCta`, `Breadcrumbs`, `UpdatedDate`, `Rich` (inline `{@link}` markers that render as plain text until the target page exists).
+- `/` in the brief's 14-step SPIN order, including the Problem, Implication (sourced: Contact Center USA on the repair clock, Texas Attorney General seven-day presumption, California DRE 30 days), Need-payoff and ForwardBox sections the canvas does not have yet. JSON-LD: WebPage with SpeakableSpecification on the AnswerBlock, Service with three Offers, FAQPage.
+- `/pricing/`: hero, three `PlanCard`s (Starter carries "Or start Starter now"), AnswerBlock, "What counts as a minute?", "Why does billing by the second matter?" (sourced BiggerPockets threads), dated `CompareTable` (Smith.ai AI and human, Ruby, MAP, PATLive, Specialty Answering Service, Buildium, Property Meld), FAQ with the sister-site link, FinalCta. JSON-LD: Product with three Offers, each with monthly and per-minute `UnitPriceSpecification`; FAQPage; BreadcrumbList.
+- Checked at 375 px and 1280 px: no horizontal scroll (the forward-box text needed `overflow-wrap` for the long domain), sticky CTA hidden until the hero leaves view.
+
+Checks: build and check pass.
+
+Lighthouse mobile (local static server, simulated throttling, three runs): `/` Performance 93 to 98, `/pricing/` 95; Accessibility, Best practices and SEO 100. CLS 0 to 0.046. Simulated LCP 2.3 to 3.0 s; observed LCP in the same trace is 0.19 s. The simulated figure tracks time-to-interactive (Next.js runtime scripts, about 150 KB), not fonts: preloading or `font-display: optional` did not move it. Kept the brief's font setup (display face preloaded only).
+
 ## For Andy to review
+
+- Phase 2, at 375 px: `/` and `/pricing/`.
+- Home Implication copy (new, not on the canvas) and its three sources.
+- Pricing "Why does billing by the second matter?" uses two BiggerPockets posts; the Ruby and PATLive Trustpilot complaints from the research could not be fetched and are not used.
+- Growth plan bullet "Rules set per property" is from the canvas, but every plan triages per property at launch (Home FAQ says so). Consider a different Growth bullet.
+- The canvas compare table said Ruby bills "Minute, rounded up". Ruby's page does not state rounding, so the table says "The minute".
 
 - Phase 0: the corrected Property Meld price ($1.50/unit add-on plus Ops), the changed Smith.ai AI terms (per-call live agent add-on, Spanish included, no money-back on the AI page), and the sources left out (NYC heat rules, both Trustpilot complaints, AnswerConnect).
 

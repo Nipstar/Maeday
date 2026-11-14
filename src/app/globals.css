@@ -39,6 +39,7 @@
     scroll-behavior: smooth;
   }
   body {
+    overflow-wrap: break-word;
     @apply bg-daylight font-sans text-midnight antialiased;
     font-size: 17px;
     line-height: 1.6;

@@ -18,7 +18,7 @@ export const routes = {
 
 /** Top-level pages that exist (added phase by phase). Segment, compare and guide pages come from content. */
 export const builtPages = {
-  pricing: false,
+  pricing: true,
   service: false,
   hub: false,
   about: false,

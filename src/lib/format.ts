@@ -108,6 +108,7 @@ export const tokens: Record<string, string> = {
   setupCallMinutes: String(site.setupCallMinutes),
   onRequest: `${site.coverage.onRequest} on request`,
   shortDomain: site.shortDomain,
+  domain: site.domain,
   texasRepairDays: site.sourceFigures.texasRepairDays,
   californiaRepairDays: site.sourceFigures.californiaRepairDays,
   californiaUrgentDays: site.sourceFigures.californiaUrgentDays,

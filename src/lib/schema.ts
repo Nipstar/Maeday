@@ -1,5 +1,5 @@
 import { site, type Plan } from '@/site.config';
-import { fill } from '@/lib/format';
+import { plain } from '@/lib/rich';
 import type { Faq } from '@/content/types';
 
 /** JSON-LD builders. Every builder takes the same data the page renders, so the two cannot drift. Never Review or AggregateRating. */
@@ -107,8 +107,8 @@ export function faqPage(faqs: Faq[]) {
     '@type': 'FAQPage',
     mainEntity: faqs.map((f) => ({
       '@type': 'Question',
-      name: fill(f.q),
-      acceptedAnswer: { '@type': 'Answer', text: fill(f.a) },
+      name: plain(f.q),
+      acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
     })),
   };
 }

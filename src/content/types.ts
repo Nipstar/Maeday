@@ -1,4 +1,10 @@
-/** Copy strings may contain {tokens} filled from site.config.ts by fill() in src/lib/format.ts. */
+/**
+ * Copy strings may contain {tokens} filled from site.config.ts by fill() in src/lib/format.ts,
+ * and {@link} markers rendered as links by <Rich> (src/lib/rich.tsx).
+ */
+import type { site } from '@/site.config';
+
+export type SourceKey = keyof typeof site.sources;
 
 export type Faq = {
   q: string;
@@ -28,7 +34,15 @@ export type CallLogData = {
   note: string;
 };
 
-export type Card = { title: string; text: string; tag?: string; tagKind?: 'emergency' | 'morning' | 'neutral' | 'reached' };
+export type Card = {
+  title: string;
+  text: string;
+  tag?: string;
+  tagKind?: 'emergency' | 'morning' | 'neutral' | 'reached';
+  /** Sourced facts: linked and dated under the card */
+  sources?: SourceKey[];
+  gateOk?: boolean;
+};
 
 export type Source = { label: string; url: string; checked: string };
 
