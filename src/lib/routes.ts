@@ -19,10 +19,10 @@ export const routes = {
 /** Top-level pages that exist (added phase by phase). Segment, compare and guide pages come from content. */
 export const builtPages = {
   pricing: true,
-  service: false,
+  service: true,
   hub: false,
-  about: false,
-  legal: false,
+  about: true,
+  legal: true,
 };
 
 /** Every indexable page, for the sitemap and llms.txt. */

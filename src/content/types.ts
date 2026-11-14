@@ -68,22 +68,26 @@ export type Segment = {
   implicationsHeading: string;
   implications: [Card, Card, Card];
   needPayoffHeading: string;
-  needPayoff: string[];
+  needPayoffIntro: string;
+  needPayoff: Card[];
   callsHeading: string;
   calls: Card[];
-  specifics: {
-    heading: string;
-    intro: string;
-    items: string[];
-    note?: string;
-    /** Optional property cards ("Riverside Commons: on-call Luis, then Marco") */
-    examples?: { name: string; text: string }[];
-    gateOk?: boolean;
-  };
+  /** Sections unique to the segment (Fair Housing, several communities, whose repair is it...) */
+  specifics: Specific[];
   faqHeading: string;
   faqs: Faq[];
   ctaHeading: string;
   related: [string, string];
+};
+
+export type Specific = {
+  heading: string;
+  intro: string;
+  items: string[];
+  note?: string;
+  /** Optional property cards ("Riverside Commons: on-call Luis, then Marco") */
+  examples?: { name: string; text: string }[];
+  gateOk?: boolean;
 };
 
 export type CompareRow = { label: string; mae: string; them: string; gateOk?: boolean };

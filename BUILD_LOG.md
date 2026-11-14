@@ -137,12 +137,25 @@ Checks: build and check pass.
 
 Lighthouse mobile (local static server, simulated throttling, three runs): `/` Performance 93 to 98, `/pricing/` 95; Accessibility, Best practices and SEO 100. CLS 0 to 0.046. Simulated LCP 2.3 to 3.0 s; observed LCP in the same trace is 0.19 s. The simulated figure tracks time-to-interactive (Next.js runtime scripts, about 150 KB), not fonts: preloading or `font-display: optional` did not move it. Kept the brief's font setup (display face preloaded only).
 
+## Phase 3: Service, segments and about (14 November 2026)
+
+Built:
+- `/emergency-maintenance-answering/`: hero, AnswerBlock, Problem, Implication (Texas AG, California DRE, Contact Center USA, each linked and dated), Need-payoff, the escalation ladder as six numbered steps (a horizontal row on desktop), an example log of a night where the on-call tech and backup miss the call and the manager answers, Limits, FAQ, CTA. JSON-LD: WebPage, Service with Offers, FAQPage, BreadcrumbList.
+- Segment template `src/app/[segment]/page.tsx` from `src/content/segments.ts`: `/apartments/` (canvas copy, Fair Housing section, several-communities section) and `/hoa/` (new copy: common areas, homeowner versus association repairs, board members, per-association rules). Each has its own example call log, Problem, Implication, Need-payoff, call cards, FAQ and related segments (shown only when built). JSON-LD: Service (audience), FAQPage, BreadcrumbList, WebPage.
+- `/about/` (Antek Automation, Andy Norman, more than 30 years in field service, Certified Retell AI Partner, no invented clients or results; AboutPage JSON-LD with founder), `/thank-you/` (noindex, `purchase_complete` once per session), `/privacy/` and `/terms/` (noindex, `[[PRIVACY_*]]` and `[[TERMS_*]]`), 404.
+
+Checks: build and check pass on 12 pages. No horizontal scroll at 375 px on any Phase 3 page.
+
 ## For Andy to review
 
 - Phase 2, at 375 px: `/` and `/pricing/`.
 - Home Implication copy (new, not on the canvas) and its three sources.
 - Pricing "Why does billing by the second matter?" uses two BiggerPockets posts; the Ruby and PATLive Trustpilot complaints from the research could not be fetched and are not used.
 - Growth plan bullet "Rules set per property" is from the canvas, but every plan triages per property at launch (Home FAQ says so). Consider a different Growth bullet.
+- Phase 3: `/emergency-maintenance-answering/`, `/apartments/`, `/hoa/`, `/about/` at 375 px.
+- HOA copy is new (no canvas board). The HOA example association "Pine Ridge Townhomes" puts "the community's own tech" first on the ladder, not an outside vendor, because vendor dispatch is behind a false flag.
+- Apartments FAQ "Which plan fits a 120-unit community?" no longer says "Most single communities start on Starter" (no data behind it); it gives the Starter numbers and offers to size it on the call.
+- About says Mae runs on Retell with Twilio. Remove if you prefer not to name suppliers.
 - The canvas compare table said Ruby bills "Minute, rounded up". Ruby's page does not state rounding, so the table says "The minute".
 
 - Phase 0: the corrected Property Meld price ($1.50/unit add-on plus Ops), the changed Smith.ai AI terms (per-call live agent add-on, Spanish included, no money-back on the AI page), and the sources left out (NYC heat rules, both Trustpilot complaints, AnswerConnect).
